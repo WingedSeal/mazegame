@@ -1,6 +1,6 @@
 import threading
 from typing import TYPE_CHECKING
-from threading import Lock
+
 
 from .map import Map
 
@@ -31,19 +31,10 @@ class Control:
         self.game.game_event.set()
         self.control_event.wait()
 
-    def _pre_run(self) -> None:
+    def pre_run(self) -> None:
         self.control_event.wait()
 
-    def _post_run(self) -> None:
+    def post_run(self) -> None:
         self.control_event.clear()
         self.game.game_event.set()
         self.game.is_control_alive = False
-
-    def test_run(self):
-        self._pre_run()
-        self._move(-1, 0)
-        self._move(-1, 0)
-        self.halt()
-        self._move(-1, 0)
-        self._move(0, -1)
-        self._post_run()

@@ -1,10 +1,15 @@
-import threading
-from mazegame.control import Control
-from mazegame.game import Game
+from mazegame.api.game_obj import get_game
+from mazegame.api.run import run
 from mazegame.map import TEST_MAP
 
-game = Game(TEST_MAP)
-control = game.control
-t2 = threading.Thread(target=control.test_run, daemon=True)
-t2.start()
-game.run()
+
+def script():
+    get_game().control._move(-1, 0)
+    get_game().control._move(-1, 0)
+    get_game().control._move(0, -1)
+    get_game().control._move(-1, 0)
+    get_game().control.halt()
+    get_game().control._move(0, -1)
+
+
+run(script, TEST_MAP)
