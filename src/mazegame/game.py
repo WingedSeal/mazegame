@@ -12,7 +12,7 @@ class Game:
     DEFAULT_WIDTH = 1280
     DEFAULT_HEIGHT = 720
     MAX_FPS = 120
-    MSPT = 2000
+    MSPT = 500
     """Millisecond per tick"""
     TITLE = "Maze Game"
     BG_COLOR = pygame.Color(10, 10, 10)
@@ -60,6 +60,8 @@ class Game:
         sys.exit()
 
     def tick(self) -> None:
+        for tile in self.moving_tiles:
+            tile.animate(1)
         self.moving_tiles = []
         self.try_move_tile(2, 2, -1, -1)
 
@@ -83,8 +85,9 @@ class Game:
         t = self.tick_delta_ms / self.MSPT
         for tile in self.moving_tiles:
             tile.animate(t)
-        for y, row in enumerate(self.map.map):
-            for x, tile in enumerate(row):
+
+        for row in self.map.map:
+            for tile in row:
                 if tile is None:
                     continue
 
