@@ -1,3 +1,4 @@
+import random
 import threading
 from typing import Callable
 
@@ -13,7 +14,9 @@ def move(direction: Direction) -> None:
     get_game().control.move(direction)
 
 
-def run(script: Callable[[], None], map: Map) -> None:
+def run(script: Callable[[], None], map: Map | list[Map]) -> None:
+    if isinstance(map, list):
+        map = random.choice(map)
     game_obj.game = Game(map)
 
     def updated_script() -> None:
