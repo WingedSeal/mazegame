@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame import locals
 
-from .map import Map, Player, Tile
+from .map import Map, Tile, TouchableTile
 from .control import Control
 
 
@@ -133,13 +133,16 @@ class Game:
             return False
         if x + dx >= self.map.width:
             return False
-        if self.map.map[y + dy][x + dx] is not None:
+        target = self.map.map[y + dy][x + dx]
+        if target is not None and not isinstance(target, TouchableTile):
             return False
         tile = self.map.map[y][x]
         if tile is None:
             return False
         tile.old_pos = tile.pos
         tile.pos = (x + dx, y + dy)
+        if isinstance(target, TouchableTile):
+            target.interact(tile)
         self.map.map[y + dy][x + dx] = tile
         self.map.map[y][x] = None
         self.moving_tiles.append(tile)

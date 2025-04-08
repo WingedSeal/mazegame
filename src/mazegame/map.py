@@ -48,6 +48,12 @@ class Tile(ABC, pygame.sprite.Sprite):
         self.rect.topleft = pixel_pos
 
 
+class TouchableTile(Tile, ABC):
+    @abstractmethod
+    def interact(self, other_tile: Tile) -> None:
+        pass
+
+
 class Block(Tile):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
@@ -80,17 +86,17 @@ class Door(Tile):
         super().__init__()
 
 
-class Key(Tile):
+class Key(TouchableTile):
     def __init__(self, color: Color) -> None:
         self.color = color
         super().__init__()
 
 
-class Spike(Tile):
+class Spike(TouchableTile):
     pass
 
 
-class Enemy(Tile):
+class Enemy(TouchableTile):
     def __init__(self, path: list[Direction]) -> None:
         self.path = path
         super().__init__()
