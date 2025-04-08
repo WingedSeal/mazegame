@@ -114,12 +114,3 @@ class Map:
                 if isinstance(tile, Player):
                     player_positions.append((x, y))
         return player_positions
-
-
-TEST_MAP = Map(
-    [
-        [None, None, None, None, Block(), None, Block()],
-        [None, None, None, None, Block(), None, Block()],
-        [None, None, None, None, Player(), None, Player()],
-    ]
-)

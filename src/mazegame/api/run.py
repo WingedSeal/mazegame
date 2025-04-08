@@ -1,10 +1,16 @@
 import threading
 from typing import Callable
 
+from ..direction import Direction
 from ..game import Game
 from ..map import Map
 from .game_obj import get_game
 from . import game_obj
+
+
+def move(direction: Direction) -> None:
+    """Move player in a direction"""
+    get_game().control.move(direction)
 
 
 def run(script: Callable[[], None], map: Map) -> None:
