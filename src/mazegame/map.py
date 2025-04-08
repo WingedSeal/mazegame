@@ -90,13 +90,29 @@ class Enemy(Tile):
 class Map:
     def __init__(self, map: list[list[Tile | None]]) -> None:
         self.map = map
-        self.width = len(map)
-        self.height = len(map[0]) if map else 0
+        self.height = len(map)
+        self.width = len(map[0]) if map else 0
+
+    def get_player_positions(self) -> list[tuple[int, int]]:
+        """
+        Find 1 or more player positions
+
+        :return: player position(s)
+        """
+        player_positions: list[tuple[int, int]] = []
+        for row in self.map:
+            for tile in row:
+                if isinstance(tile, Player):
+                    player_positions.append(tile.pos)
+        return player_positions
 
 
 TEST_MAP = Map(
     [
         [Block(), Block(), Block()],
+        [Block(), None, Block()],
+        [Block(), None, Block()],
+        [Block(), None, Block()],
         [Block(), None, Block()],
         [Block(), Block(), Player()],
     ]

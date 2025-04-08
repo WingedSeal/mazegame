@@ -3,6 +3,7 @@ import pygame
 from pygame import locals
 from pygame.math import Vector2
 
+from .control import Control
 from .map import Map, Tile
 
 
@@ -20,6 +21,7 @@ class Game:
     def __init__(self, map: Map) -> None:
         pygame.init()
         self.map = map
+        self.control = Control(map.get_player_positions())
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         self.display_surface = pygame.display.set_mode(
             (self.screen_width, self.screen_height)
@@ -90,7 +92,6 @@ class Game:
             for tile in row:
                 if tile is None:
                     continue
-
                 assert hasattr(tile, "surf")
                 assert hasattr(tile, "rect")
                 self.display_surface.blit(tile.surf, tile.rect)
