@@ -100,20 +100,17 @@ class Map:
         :return: player position(s)
         """
         player_positions: list[tuple[int, int]] = []
-        for row in self.map:
-            for tile in row:
+        for y, row in enumerate(self.map):
+            for x, tile in enumerate(row):
                 if isinstance(tile, Player):
-                    player_positions.append(tile.pos)
+                    player_positions.append((x, y))
         return player_positions
 
 
 TEST_MAP = Map(
     [
-        [Block(), Block(), Block()],
-        [Block(), None, Block()],
-        [Block(), None, Block()],
-        [Block(), None, Block()],
-        [Block(), None, Block()],
-        [Block(), Block(), Player()],
+        [None, None, None, None, Block(), None, Block()],
+        [None, None, None, None, Block(), None, Block()],
+        [None, None, None, None, None, None, Player()],
     ]
 )

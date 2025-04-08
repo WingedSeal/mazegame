@@ -1,14 +1,14 @@
 import sys
+import threading
+from typing import TYPE_CHECKING
 import pygame
 from pygame import locals
-from pygame.math import Vector2
 
+from .map import Map, Player, Tile
 from .control import Control
-from .map import Map, Tile
 
 
 class Game:
-
     clock = pygame.time.Clock()
     DEFAULT_WIDTH = 1280
     DEFAULT_HEIGHT = 720
@@ -17,11 +17,16 @@ class Game:
     """Millisecond per tick"""
     TITLE = "Maze Game"
     BG_COLOR = pygame.Color(10, 10, 10)
+    game_event = threading.Event()
+    next_moves: list[tuple[int, int, int, int]] = []
+    """Moves set by Control (pos_x, pos_y, dx, dy)"""
+    is_control_alive = True
 
     def __init__(self, map: Map) -> None:
+        self.control = Control(map, self)
+        self.game_event.set()
         pygame.init()
         self.map = map
-        self.control = Control(map.get_player_positions())
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         self.display_surface = pygame.display.set_mode(
             (self.screen_width, self.screen_height)
@@ -51,6 +56,7 @@ class Game:
 
     def teardown(self) -> None:
         pygame.quit()
+        sys.exit()
 
     def run(self) -> None:
         """
@@ -65,7 +71,14 @@ class Game:
         for tile in self.moving_tiles:
             tile.animate(1)
         self.moving_tiles = []
-        self.try_move_tile(2, 2, -1, -1)
+
+        if self.is_control_alive:
+            self.game_event.clear()
+            self.control.control_event.set()
+            self.game_event.wait()
+            for pos_x, pos_y, dx, dy in self.next_moves:
+                self.try_move_tile(pos_x, pos_y, dx, dy)
+            self.next_moves = []
 
     def update(self) -> bool:
         """
@@ -73,6 +86,7 @@ class Game:
 
         :return: Whether the game should end
         """
+
         for event in pygame.event.get():
             if event.type == locals.QUIT:
                 self.teardown()
@@ -121,6 +135,8 @@ class Game:
         self.map.map[y + dy][x + dx] = tile
         self.map.map[y][x] = None
         self.moving_tiles.append(tile)
+        if isinstance(tile, Player):
+            self.control.player_positions.append(tile.pos)
         return True
 
     def render_map(self) -> None:
