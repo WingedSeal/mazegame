@@ -150,11 +150,11 @@ class Game:
             return False
         tile.old_pos = tile.pos
         tile.pos = (x + dx, y + dy)
-        if isinstance(target, TouchableTile):
-            target.interact(tile)
         self.map.map[y + dy][x + dx] = tile
         self.map.map[y][x] = None
         self.moving_tiles.append(tile)
+        if isinstance(target, TouchableTile):
+            target.interact(tile)
         return True
 
     def render_map(self) -> None:
