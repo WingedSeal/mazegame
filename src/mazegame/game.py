@@ -125,6 +125,11 @@ class Game:
         :param dy: Target TIle's y
         :return: Whether it was successful
         """
+        if y + dy >= self.map.height:
+            return False
+        if x + dx >= self.map.width:
+            return False
+
         if self.map.map[y + dy][x + dx] is not None:
             return False
         tile = self.map.map[y][x]

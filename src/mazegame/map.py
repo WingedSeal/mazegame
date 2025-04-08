@@ -8,7 +8,16 @@ from .color import Color
 
 
 def _lerp(a: tuple[float, float], b: tuple[float, float], t: float) -> tuple[int, int]:
-    return int((1 - t) * a[0]) + int(t * b[0]), int((1 - t) * a[1]) + int(t * b[1])
+    return (
+        int((1 - t) * a[0] + t * b[0]),
+        int((1 - t) * a[1] + t * b[1]),
+    )
+
+
+def _dash_lerp(
+    a: tuple[float, float], b: tuple[float, float], t: float
+) -> tuple[int, int]:
+    return _lerp(a, b, 1 - (1 - t) ** 4)
 
 
 class Tile(ABC, pygame.sprite.Sprite):
@@ -27,13 +36,13 @@ class Tile(ABC, pygame.sprite.Sprite):
 
     def animate(self, t: float):
         """
-        Animate moving tile, default lerp.
+        Animate moving tile, default to dash lerp.
 
         :param start: start position
         :param end: end position
         :param t: time range between 0 and 1
         """
-        pixel_pos = _lerp(
+        pixel_pos = _dash_lerp(
             self._pos_to_pixel(self.old_pos), self._pos_to_pixel(self.pos), t
         )
         self.rect.topleft = pixel_pos

@@ -29,4 +29,5 @@ class Control:
         self._move(-1, 0)
         self._move(-1, 0)
         self._move(-1, 0)
+        self._move(0, -1)
         self.game.is_control_alive = False
