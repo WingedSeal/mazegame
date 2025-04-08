@@ -77,7 +77,11 @@ class Game:
             self.control.control_event.set()
             self.game_event.wait()
             for pos_x, pos_y, dx, dy in self.next_moves:
-                self.try_move_tile(pos_x, pos_y, dx, dy)
+                if self.try_move_tile(pos_x, pos_y, dx, dy):
+                    self.control.player_positions.append((pos_x + dx, pos_y + dy))
+                else:
+                    self.control.player_positions.append((pos_x, pos_y))
+
             self.next_moves = []
 
     def update(self) -> bool:
@@ -129,7 +133,6 @@ class Game:
             return False
         if x + dx >= self.map.width:
             return False
-
         if self.map.map[y + dy][x + dx] is not None:
             return False
         tile = self.map.map[y][x]
@@ -140,8 +143,6 @@ class Game:
         self.map.map[y + dy][x + dx] = tile
         self.map.map[y][x] = None
         self.moving_tiles.append(tile)
-        if isinstance(tile, Player):
-            self.control.player_positions.append(tile.pos)
         return True
 
     def render_map(self) -> None:
