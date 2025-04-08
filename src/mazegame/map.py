@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Type, TypeVar
 
 import pygame
-from pygame.math import Vector2
 
 from .direction import Direction
 from .color import Color
@@ -48,7 +48,10 @@ class Tile(ABC, pygame.sprite.Sprite):
         self.rect.topleft = pixel_pos
 
 
-class TouchableTile(Tile, ABC):
+T = TypeVar("T", bound=Tile)
+
+
+class TouchableTile(Tile):
     @abstractmethod
     def interact(self, other_tile: Tile) -> None:
         pass
@@ -98,8 +101,20 @@ class Spike(TouchableTile):
 
 class Enemy(TouchableTile):
     def __init__(self, path: list[Direction]) -> None:
+        self.index = 0
         self.path = path
         super().__init__()
+
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        self.surf = pygame.Surface((tile_size, tile_size))
+        self.surf.fill((255, 0, 255))
+        self.rect = self.surf.get_rect()
+        self.rect.topleft = self._pos_to_pixel(pos)
+
+    def interact(self, other_tile: Tile) -> None:
+        raise NotImplementedError("YOU DIED")
 
 
 class Map:
@@ -108,15 +123,28 @@ class Map:
         self.height = len(map)
         self.width = len(map[0]) if map else 0
 
-    def get_player_positions(self) -> list[tuple[int, int]]:
+    def get_positions(self, cls: Type[Tile]) -> list[tuple[int, int]]:
         """
-        Find 1 or more player positions
+        Find 1 or more positions of any tile type
 
-        :return: player position(s)
+        :return: tile position(s)
         """
-        player_positions: list[tuple[int, int]] = []
+        positions: list[tuple[int, int]] = []
         for y, row in enumerate(self.map):
             for x, tile in enumerate(row):
-                if isinstance(tile, Player):
-                    player_positions.append((x, y))
-        return player_positions
+                if isinstance(tile, cls):
+                    positions.append((x, y))
+        return positions
+
+    def get_tiles(self, cls: Type[T]) -> list[T]:
+        """
+        Find 1 or more tiles
+
+        :return: tiles
+        """
+        tiles: list[T] = []
+        for row in self.map:
+            for tile in row:
+                if isinstance(tile, cls):
+                    tiles.append(tile)
+        return tiles

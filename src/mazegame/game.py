@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame import locals
 
-from .map import Map, Tile, TouchableTile
+from .map import Enemy, Map, Tile, TouchableTile
 from .control import Control
 
 
@@ -24,6 +24,7 @@ class Game:
 
     def __init__(self, map: Map) -> None:
         self.control = Control(map, self)
+        self.enemies = map.get_tiles(Enemy)
         self.game_event.set()
         pygame.init()
         self.map = map
@@ -81,8 +82,16 @@ class Game:
                     self.control.player_positions.append((pos_x + dx, pos_y + dy))
                 else:
                     self.control.player_positions.append((pos_x, pos_y))
-
             self.next_moves = []
+
+        for enemy in self.enemies:
+            self.try_move_tile(
+                enemy.pos[0],
+                enemy.pos[1],
+                enemy.path[enemy.index].value[0],
+                enemy.path[enemy.index].value[1],
+            )
+            enemy.index = (enemy.index + 1) % len(enemy.path)
 
     def update(self) -> bool:
         """

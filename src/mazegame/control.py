@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from .direction import Direction
 
 
-from .map import Map
+from .map import Map, Player
 
 if TYPE_CHECKING:
     from .game import Game
@@ -16,18 +16,12 @@ class Control:
     def __init__(self, map: Map, game: "Game") -> None:
         self.control_event.clear()
         self.game = game
-        self.player_positions = map.get_player_positions()
+        self.player_positions = map.get_positions(Player)
 
     def move(self, direction: Direction) -> None:
         match direction:
-            case Direction.LEFT:
-                self._move(-1, 0)
-            case Direction.RIGHT:
-                self._move(1, 0)
-            case Direction.UP:
-                self._move(0, -1)
-            case Direction.DOWN:
-                self._move(0, 1)
+            case Direction.LEFT | Direction.RIGHT | Direction.UP | Direction.DOWN:
+                self._move(*direction.value)
             case Direction.HALT:
                 self._halt()
             case _:
