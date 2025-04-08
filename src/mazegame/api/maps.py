@@ -7,7 +7,8 @@ TEST_MAP_ENEMY = Enemy(
         Direction.RIGHT,
         Direction.LEFT,
         Direction.LEFT,
-    ]
+    ],
+    chance_to_move=0.5,
 )
 
 TEST_MAP = Map(

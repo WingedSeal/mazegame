@@ -100,9 +100,10 @@ class Spike(TouchableTile):
 
 
 class Enemy(TouchableTile):
-    def __init__(self, path: list[Direction]) -> None:
+    def __init__(self, path: list[Direction], chance_to_move: float = 1.0) -> None:
         self.index = 0
         self.path = path
+        self.chance_to_move = chance_to_move
         super().__init__()
 
     def init(self, pos: tuple[int, int], tile_size: int) -> None:

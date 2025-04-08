@@ -1,3 +1,4 @@
+import random
 import sys
 import threading
 from typing import TYPE_CHECKING
@@ -85,6 +86,8 @@ class Game:
             self.next_moves = []
 
         for enemy in self.enemies:
+            if random.random() >= enemy.chance_to_move:
+                continue
             self.try_move_tile(
                 enemy.pos[0],
                 enemy.pos[1],
