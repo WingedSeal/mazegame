@@ -99,6 +99,10 @@ class Spike(TouchableTile):
     pass
 
 
+class Banana(TouchableTile):
+    pass
+
+
 class Enemy(TouchableTile):
     def __init__(self, path: list[Direction], chance_to_move: float = 1.0) -> None:
         self.index = 0
