@@ -92,8 +92,9 @@ class Block(Tile):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        self.surf = pygame.Surface((tile_size, tile_size))
-        self.surf.fill((255, 255, 0))
+        if not hasattr(type(self), "surf"):
+            type(self).surf = pygame.Surface((tile_size, tile_size))
+            type(self).surf.fill((255, 255, 0))
         self.rect = self.surf.get_rect()
 
 
@@ -105,8 +106,9 @@ class ColoredFloor(TouchableTile, GetColor):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        self.surf = pygame.Surface((tile_size, tile_size))
-        self.surf.fill(self.color.value)
+        if not hasattr(type(self), "surf"):
+            type(self).surf = pygame.Surface((tile_size, tile_size))
+            type(self).surf.fill(self.color.value)
         self.rect = self.surf.get_rect()
 
     def interact(self, other_tile: Tile) -> None:
@@ -125,8 +127,9 @@ class Player(Tile):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        self.surf = pygame.Surface((tile_size * 0.9, tile_size * 0.9))
-        self.surf.fill((255, 0, 0))
+        if not hasattr(type(self), "surf"):
+            type(self).surf = pygame.Surface((tile_size * 0.9, tile_size * 0.9))
+            type(self).surf.fill((255, 0, 0))
         self.rect = self.surf.get_rect()
 
     def get_top_left(self, pos: tuple[int, int]) -> tuple[int, int]:
@@ -165,8 +168,9 @@ class Enemy(TouchableTile):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        self.surf = pygame.Surface((tile_size, tile_size))
-        self.surf.fill((255, 0, 255))
+        if not hasattr(type(self), "surf"):
+            type(self).surf = pygame.Surface((tile_size, tile_size))
+            type(self).surf.fill((255, 0, 255))
         self.rect = self.surf.get_rect()
 
     def interact(self, other_tile: Tile) -> None:
