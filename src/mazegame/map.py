@@ -204,3 +204,6 @@ class Map:
                 if isinstance(tile, cls):
                     tiles.append(tile)
         return tiles
+
+
+# TODO: MAKE SURE ALL INSTANCES SHARE A SURFACE, split init into per class (tile_size) and per instance
