@@ -15,6 +15,16 @@ def move(direction: Direction) -> None:
     get_game().control.move(direction)
 
 
+def wait() -> None:
+    """Consume a turn, but doesn't move (Same as `move(HALT)`)"""
+    get_game().control.move(Direction.HALT)
+
+
+def halt() -> None:
+    """Consume a turn, but doesn't move (Same as `move(HALT)`)"""
+    get_game().control.move(Direction.HALT)
+
+
 def get_tile(
     direction: Direction = Direction.HALT, player_index: int = 0
 ) -> Tile | None:
