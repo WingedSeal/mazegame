@@ -26,13 +26,22 @@ class Tile(ABC, pygame.sprite.Sprite):
     rect: pygame.Rect
     pos: tuple[int, int] = (0, 0)
     old_pos: tuple[int, int] = (0, 0)
+    tile_under: "Tile | None" = None
 
     @abstractmethod
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         pass
 
-    def _pos_to_pixel(self, pos: tuple[int, int]) -> tuple[int, int]:
-        return self.tile_size * pos[0], self.tile_size * pos[1]
+    def _pos_to_pixel(
+        self, pos: tuple[int, int], padding: tuple[int, int] = (0, 0)
+    ) -> tuple[int, int]:
+        return (
+            self.tile_size * pos[0] + padding[0],
+            self.tile_size * pos[1] + padding[1],
+        )
+
+    def get_top_left(self, pos: tuple[int, int]) -> tuple[int, int]:
+        return self._pos_to_pixel(pos)
 
     def animate(self, t: float):
         """
@@ -43,7 +52,7 @@ class Tile(ABC, pygame.sprite.Sprite):
         :param t: time range between 0 and 1
         """
         pixel_pos = _dash_lerp(
-            self._pos_to_pixel(self.old_pos), self._pos_to_pixel(self.pos), t
+            self.get_top_left(self.old_pos), self.get_top_left(self.pos), t
         )
         self.rect.topleft = pixel_pos
 
@@ -58,11 +67,16 @@ class Tile(ABC, pygame.sprite.Sprite):
     def __str__(self) -> str:
         return f"{self.__class__.__name__} at {self.pos}"
 
+    def __repr__(self) -> str:
+        return str(self)
+
 
 T = TypeVar("T", bound=Tile)
 
 
 class TouchableTile(Tile):
+    can_be_under = True
+
     @abstractmethod
     def interact(self, other_tile: Tile) -> None:
         pass
@@ -75,13 +89,22 @@ class Block(Tile):
         self.surf = pygame.Surface((tile_size, tile_size))
         self.surf.fill((255, 255, 0))
         self.rect = self.surf.get_rect()
-        self.rect.topleft = self._pos_to_pixel(pos)
 
 
-class ColorFloor(Tile):
+class ColorFloor(TouchableTile):
     def __init__(self, color: Color) -> None:
         self.color = color
         super().__init__()
+
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        self.surf = pygame.Surface((tile_size, tile_size))
+        self.surf.fill(self.color.value)
+        self.rect = self.surf.get_rect()
+
+    def interact(self, other_tile: Tile) -> None:
+        pass
 
 
 class Player(Tile):
@@ -90,10 +113,14 @@ class Player(Tile):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        self.surf = pygame.Surface((tile_size, tile_size))
+        self.surf = pygame.Surface((tile_size * 0.9, tile_size * 0.9))
         self.surf.fill((255, 0, 0))
         self.rect = self.surf.get_rect()
-        self.rect.topleft = self._pos_to_pixel(pos)
+
+    def get_top_left(self, pos: tuple[int, int]) -> tuple[int, int]:
+        return self._pos_to_pixel(
+            pos, padding=(int(self.tile_size * 0.05), int(self.tile_size * 0.05))
+        )
 
 
 class Door(Tile):
@@ -129,7 +156,6 @@ class Enemy(TouchableTile):
         self.surf = pygame.Surface((tile_size, tile_size))
         self.surf.fill((255, 0, 255))
         self.rect = self.surf.get_rect()
-        self.rect.topleft = self._pos_to_pixel(pos)
 
     def interact(self, other_tile: Tile) -> None:
         raise NotImplementedError("YOU DIED")

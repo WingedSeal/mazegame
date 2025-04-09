@@ -3,6 +3,7 @@ from mazegame import *
 
 def script():
     move(LEFT)
+    print(get_tile())
     move(LEFT)
     move(UP)
     print(get_tile(UP, 1))

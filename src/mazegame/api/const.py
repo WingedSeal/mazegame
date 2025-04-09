@@ -1,3 +1,4 @@
+from ..map import Block, Enemy
 from ..color import Color
 from ..direction import Direction
 
@@ -10,5 +11,5 @@ DOWN = Direction.DOWN
 UP = Direction.UP
 HALT = Direction.HALT
 
-BLOCK = "Block"
-ENEMY = "Enemy"
+BLOCK = Block.__class__.__name__
+ENEMY = Enemy.__class__.__name__

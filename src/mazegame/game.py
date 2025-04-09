@@ -15,7 +15,7 @@ class Game:
     DEFAULT_WIDTH = 1280
     DEFAULT_HEIGHT = 720
     MAX_FPS = 120
-    MSPT = 500
+    MSPT = 2000
     """Millisecond per tick"""
     TITLE = "Maze Game"
     BG_COLOR = pygame.Color(10, 10, 10)
@@ -46,6 +46,7 @@ class Game:
             for x, tile in enumerate(row):
                 if tile is not None:
                     tile.init((x, y), self.tile_size)
+                    tile.rect.topleft = tile.get_top_left((x, y))
 
     def _get_tile_size(self) -> tuple[int, int, int]:
         """
@@ -73,10 +74,11 @@ class Game:
 
     def get_tile(self, direction: Direction, player_index: int = 0) -> Tile | None:
         player = self.players[player_index]
-        tile = self._get_tile(
+        if direction == Direction.HALT:
+            return player.tile_under
+        return self._get_tile(
             player.pos[0] + direction.value[0], player.pos[1] + direction.value[1]
         )
-        return tile
 
     def run(self) -> None:
         """
@@ -135,14 +137,24 @@ class Game:
         t = self.tick_delta_ms / self.MSPT
         for tile in self.moving_tiles:
             tile.animate(t)
-
         for row in self.map.map:
             for tile in row:
                 if tile is None:
                     continue
+                if any(tile is _tile for _tile in self.moving_tiles):
+                    continue
                 assert hasattr(tile, "surf")
                 assert hasattr(tile, "rect")
+                if tile.tile_under is not None:
+                    self.display_surface.blit(
+                        tile.tile_under.surf, tile.tile_under.rect
+                    )
                 self.display_surface.blit(tile.surf, tile.rect)
+
+        for tile in self.moving_tiles:
+            if tile.tile_under is not None:
+                self.display_surface.blit(tile.tile_under.surf, tile.tile_under.rect)
+            self.display_surface.blit(tile.surf, tile.rect)
 
         pygame.display.update()
         self.time_delta = self.clock.tick(self.MAX_FPS)
@@ -172,10 +184,14 @@ class Game:
         tile.old_pos = tile.pos
         tile.pos = (x + dx, y + dy)
         self.map.map[y + dy][x + dx] = tile
-        self.map.map[y][x] = None
+        self.map.map[y][x] = tile.tile_under
+        tile.tile_under = None
         self.moving_tiles.append(tile)
+
         if isinstance(target, TouchableTile):
             target.interact(tile)
+            if target.can_be_under:
+                tile.tile_under = target
         return True
 
     def render_map(self) -> None:
