@@ -15,7 +15,7 @@ class Game:
     DEFAULT_WIDTH = 1280
     DEFAULT_HEIGHT = 720
     MAX_FPS = 120
-    MSPT = 2000
+    MSPT = 500
     """Millisecond per tick"""
     TITLE = "Maze Game"
     BG_COLOR = pygame.Color(10, 10, 10)
