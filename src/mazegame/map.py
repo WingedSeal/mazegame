@@ -67,8 +67,8 @@ class Tile(ABC, pygame.sprite.Sprite):
     def __str__(self) -> str:
         return f"{self.__class__.__name__} at {self.pos}"
 
-    def __repr__(self) -> str:
-        return str(self)
+    # def __repr__(self) -> str:
+    #     return str(self)
 
 
 T = TypeVar("T", bound=Tile)
@@ -91,7 +91,7 @@ class Block(Tile):
         self.rect = self.surf.get_rect()
 
 
-class ColorFloor(TouchableTile):
+class ColoredFloor(TouchableTile):
     def __init__(self, color: Color) -> None:
         self.color = color
         super().__init__()
@@ -105,6 +105,9 @@ class ColorFloor(TouchableTile):
 
     def interact(self, other_tile: Tile) -> None:
         pass
+
+    def __str__(self) -> str:
+        return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
 class Player(Tile):

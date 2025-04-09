@@ -1,6 +1,6 @@
 from ..direction import Direction
 from ..color import Color
-from ..map import ColorFloor, Enemy, Map, Block, Player
+from ..map import ColoredFloor, Enemy, Map, Block, Player
 
 TEST_MAP_ENEMY = Enemy(
     [
@@ -16,7 +16,7 @@ TEST_MAP = Map(
     [
         [TEST_MAP_ENEMY, None, None, None, Block(), None, Block()],
         [None, None, None, None, Block(), None, Block()],
-        [None, None, None, ColorFloor(Color.BLUE), Player(), None, Player()],
+        [None, None, None, ColoredFloor(Color.BLUE), Player(), None, Player()],
     ]
 )
 
