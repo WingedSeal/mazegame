@@ -20,6 +20,12 @@ def _dash_lerp(
     return _lerp(a, b, 1 - (1 - t) ** 4)
 
 
+class GetColor(ABC):
+    @abstractmethod
+    def get_color(self) -> Color:
+        pass
+
+
 class Tile(ABC, pygame.sprite.Sprite):
     surf: pygame.Surface
     tile_size = 0
@@ -91,7 +97,7 @@ class Block(Tile):
         self.rect = self.surf.get_rect()
 
 
-class ColoredFloor(TouchableTile):
+class ColoredFloor(TouchableTile, GetColor):
     def __init__(self, color: Color) -> None:
         self.color = color
         super().__init__()
@@ -105,6 +111,9 @@ class ColoredFloor(TouchableTile):
 
     def interact(self, other_tile: Tile) -> None:
         pass
+
+    def get_color(self) -> Color:
+        return self.color
 
     def __str__(self) -> str:
         return f"{self.color} {self.__class__.__name__} at {self.pos}"

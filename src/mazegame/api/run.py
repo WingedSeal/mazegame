@@ -2,9 +2,10 @@ import random
 import threading
 from typing import Callable
 
+from ..color import Color
 from ..direction import Direction
 from ..game import Game
-from ..map import Map, Tile
+from ..map import GetColor, Map, Tile
 from .game_obj import get_game
 from . import game_obj
 
@@ -18,13 +19,30 @@ def get_tile(
     direction: Direction = Direction.HALT, player_index: int = 0
 ) -> Tile | None:
     """
-    Get the tile on a direction compared to a player
+    Get the tile in a direction compared to a player
 
     :param direction: Which direction to look for tile, use Halt to get the tile player is on, defaults to Direction.Halt
     :param player_index: Which player to get tile from, defaults to 0
     :return: Tile or None
     """
     return get_game().get_tile(direction, player_index)
+
+
+def get_color(
+    direction: Direction = Direction.HALT, player_index: int = 0
+) -> Color | None:
+    """
+    Get the color of the tile in a direction compared to a player
+
+    :param direction: Which direction to look for tile, use Halt to get the tile player is on, defaults to Direction.Halt
+    :param player_index: Which player to get tile from, defaults to 0
+    :return: Tile or None
+    """
+    tile = get_game().get_tile(direction, player_index)
+    if not isinstance(tile, GetColor):
+        return None
+
+    return tile.get_color()
 
 
 def run(script: Callable[[], None], map: Map | list[Map]) -> None:

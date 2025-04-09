@@ -3,9 +3,10 @@ from mazegame import *
 
 def script():
     move(LEFT)
+    print(get_tile())
+    print(get_color())
     move(LEFT)
     move(UP)
-    print(get_tile(UP, 1))
     move(LEFT)
     move(HALT)
     move(UP)
