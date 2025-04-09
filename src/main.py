@@ -2,16 +2,26 @@ from mazegame import *
 
 
 def script():
-    move(LEFT)
-    print(get_tile())
-    print(get_tile() == COLORED_FLOOR)
-    print(get_color())
-    print(get_color() == BLUE)
-    move(LEFT)
-    move(UP)
-    move(LEFT)
-    move(HALT)
-    move(UP)
+    while get_tile(UP) != ENEMY:
+        move(HALT)
+    while get_tile(UP) == ENEMY:
+        move(HALT)
+    count = 0
+    while count < 5:
+        if get_tile(UP) == ENEMY:
+            move(HALT)
+        else:
+            move(UP)
+            count += 1
+    move(RIGHT)
+    while get_tile(LEFT) != ENEMY:
+        move(HALT)
+    while get_tile(LEFT) == ENEMY:
+        move(HALT)
+        move(LEFT)
+    for _ in range(6):
+        move(UP)
+    move(RIGHT)
 
 
-run(script, TEST_MAP)
+run(script, HARD1)
