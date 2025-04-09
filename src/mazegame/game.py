@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING
 import pygame
 from pygame import locals
 
-from .map import Enemy, Map, Tile, TouchableTile
+from .direction import Direction
+from .map import Enemy, Map, Player, Tile, TouchableTile
 from .control import Control
 
 
@@ -26,6 +27,9 @@ class Game:
     def __init__(self, map: Map) -> None:
         self.control = Control(map, self)
         self.enemies = map.get_tiles(Enemy)
+        self.players = map.get_tiles(Player)
+        for i, player in enumerate(self.players):
+            player.index = i
         self.game_event.set()
         pygame.init()
         self.map = map
@@ -59,6 +63,20 @@ class Game:
     def teardown(self) -> None:
         pygame.quit()
         sys.exit()
+
+    def _get_tile(self, x: int, y: int) -> Tile | None:
+        if x < 0 or x >= self.map.width:
+            return None
+        if y < 0 or y >= self.map.height:
+            return None
+        return self.map.map[y][x]
+
+    def get_tile(self, direction: Direction, player_index: int = 0) -> Tile | None:
+        player = self.players[player_index]
+        tile = self._get_tile(
+            player.pos[0] + direction.value[0], player.pos[1] + direction.value[1]
+        )
+        return tile
 
     def run(self) -> None:
         """

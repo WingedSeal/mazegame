@@ -1,3 +1,3 @@
-from .const import LEFT, RIGHT, UP, DOWN, HALT, BLUE, RED, GREEN
+from .const import LEFT, RIGHT, UP, DOWN, HALT, BLUE, RED, GREEN, BLOCK, ENEMY
 from .maps import TEST_MAP
-from .run import run, move
+from .run import run, move, get_tile

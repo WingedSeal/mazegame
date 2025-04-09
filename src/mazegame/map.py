@@ -47,6 +47,17 @@ class Tile(ABC, pygame.sprite.Sprite):
         )
         self.rect.topleft = pixel_pos
 
+    def __eq__(self, value: object) -> bool:
+        if type(self) == type(value):
+            return True
+        if isinstance(value, str):
+            if self.__class__.__name__ == value:
+                return True
+        return False
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__} at {self.pos}"
+
 
 T = TypeVar("T", bound=Tile)
 
@@ -74,6 +85,8 @@ class ColorFloor(Tile):
 
 
 class Player(Tile):
+    index: int
+
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos

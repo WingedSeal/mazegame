@@ -9,3 +9,6 @@ RIGHT = Direction.RIGHT
 DOWN = Direction.DOWN
 UP = Direction.UP
 HALT = Direction.HALT
+
+BLOCK = "Block"
+ENEMY = "Enemy"
