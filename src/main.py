@@ -18,7 +18,7 @@ def script():
         move(HALT)
     while get_tile(LEFT) == ENEMY:
         move(HALT)
-        move(LEFT)
+    move(LEFT)
     for _ in range(6):
         move(UP)
     move(RIGHT)
