@@ -13,6 +13,7 @@ def script():
         else:
             move(UP)
             count += 1
+    return
     move(RIGHT)
     while get_tile(LEFT) != ENEMY:
         move(HALT)

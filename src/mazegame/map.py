@@ -153,7 +153,7 @@ class ColoredBlock(Tile, GetColor):
         return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
-class Player(Tile):
+class Player(TouchableTile):
     index: int
 
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
@@ -168,6 +168,10 @@ class Player(Tile):
         return self._pos_to_pixel(
             pos, padding=(int(self.tile_size * 0.05), int(self.tile_size * 0.05))
         )
+
+    def interact(self, other_tile: Tile) -> None:
+        if isinstance(other_tile, Enemy):
+            raise NotImplementedError("You died, enemy ran into you")
 
 
 class Door(Tile):
