@@ -99,6 +99,8 @@ class Block(Tile):
 
 
 class ColoredFloor(TouchableTile, GetColor):
+    surfs: dict[Color, pygame.Surface] = {}
+
     def __init__(self, color: Color) -> None:
         self.color = color
         super().__init__()
@@ -106,13 +108,43 @@ class ColoredFloor(TouchableTile, GetColor):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        if not hasattr(type(self), "surf"):
-            type(self).surf = pygame.Surface((tile_size, tile_size))
-            type(self).surf.fill(self.color.value)
+        if self.color.value in self.surfs:
+            self.surf = self.surfs[self.color]
+        else:
+            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf.fill(self.color.value)
+            self.surfs[self.color] = self.surf
+
         self.rect = self.surf.get_rect()
 
     def interact(self, other_tile: Tile) -> None:
         pass
+
+    def get_color(self) -> Color:
+        return self.color
+
+    def __str__(self) -> str:
+        return f"{self.color} {self.__class__.__name__} at {self.pos}"
+
+
+class ColoredBlock(Tile, GetColor):
+    surfs: dict[Color, pygame.Surface] = {}
+
+    def __init__(self, color: Color) -> None:
+        self.color = color
+        super().__init__()
+
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if self.color.value in self.surfs:
+            self.surf = self.surfs[self.color]
+        else:
+            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf.fill(self.color.value)
+            self.surfs[self.color] = self.surf
+
+        self.rect = self.surf.get_rect()
 
     def get_color(self) -> Color:
         return self.color
@@ -154,7 +186,7 @@ class Spike(TouchableTile):
     pass
 
 
-class Banana(TouchableTile):
+class Exit(TouchableTile):
     pass
 
 
