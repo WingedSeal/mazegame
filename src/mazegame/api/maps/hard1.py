@@ -11,14 +11,14 @@ HARD1 = Map(
     [
         [Block(), None, None, Block()],
         [Block(), None, Block(), Block()],
+        [Block(), None, Block(), Block()],
+        [Block(), None, Block(), Block()],
+        [Block(), None, Block(), Block()],
         [Block(), Door(Color.BLUE), Block(), Block()],
-        [Block(), None, Block(), Block()],
-        [Block(), None, Block(), Block()],
-        [Block(), None, Block(), Block()],
         [Block(), None, None, Block()],
         [Block(), None, Block(), Block()],
-        [Block(), Key(Color.BLUE), Block(), Block()],
         [Block(), None, Block(), Block()],
+        [Block(), Key(Color.BLUE), Block(), Block()],
         [Block(), ENEMY, Block(), Block()],
         [Block(), Player(), Block(), Block()],
     ]
