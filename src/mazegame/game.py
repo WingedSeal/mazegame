@@ -301,8 +301,8 @@ class Game:
         self.moving_tiles.append(tile)
 
         if isinstance(target, TouchableTile):
-            target.interacted_with(tile, self)
             tile.tile_under = target
+            target.interacted_with(tile, self)
         return True
 
     def render_map(self) -> None:

@@ -1,6 +1,6 @@
 from ...direction import Direction
 from ...color import Color
-from ...map import ColoredFloor, Door, Enemy, Map, Block, Player
+from ...map import ColoredFloor, Door, Enemy, Key, Map, Block, Player
 
 ENEMY = Enemy(
     [Direction.UP] * 10 + [Direction.DOWN] * 10,
@@ -11,13 +11,13 @@ HARD1 = Map(
     [
         [Block(), None, None, Block()],
         [Block(), None, Block(), Block()],
+        [Block(), Door(Color.BLUE), Block(), Block()],
         [Block(), None, Block(), Block()],
         [Block(), None, Block(), Block()],
-        [Block(), None, Door(Color.BLUE), Block()],
         [Block(), None, Block(), Block()],
         [Block(), None, None, Block()],
         [Block(), None, Block(), Block()],
-        [Block(), None, Block(), Block()],
+        [Block(), Key(Color.BLUE), Block(), Block()],
         [Block(), None, Block(), Block()],
         [Block(), ENEMY, Block(), Block()],
         [Block(), Player(), Block(), Block()],

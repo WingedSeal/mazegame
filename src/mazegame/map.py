@@ -241,9 +241,34 @@ class DoorFrame(TouchableTile, GetColor):
 
 
 class Key(TouchableTile):
+    surfs: dict[Color, pygame.Surface] = {}
+
     def __init__(self, color: Color) -> None:
         self.color = color
         super().__init__()
+
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
+        if not isinstance(other_tile, Player):
+            return
+        other_tile.tile_under = None
+        for y, row in enumerate(game.map.map):
+            for x, tile in enumerate(row):
+                if isinstance(tile, Door) and tile.color == self.color:
+                    game.map.map[y][x] = tile.tile_under
+
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if self.color in self.surfs:
+            self.surf = self.surfs[self.color]
+        else:
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            self.surf.fill(
+                self.color.value,
+                (tile_size * 0.45, tile_size * 0.45, tile_size * 0.1, tile_size * 0.1),
+            )
+            self.surfs[self.color] = self.surf
+        self.rect = self.surf.get_rect()
 
 
 class Spike(TouchableTile):
