@@ -19,7 +19,7 @@ class GameState(Enum):
 
 @dataclass
 class GameOverData:
-    last_frame: pygame.Surface
+    last_frame: pygame.Surface | None
     reason: str
     tips: str
     dark_overlay: pygame.Surface
@@ -162,27 +162,28 @@ class Game:
                 self.display_surface.blit(tile.tile_under.surf, tile.tile_under.rect)
             self.display_surface.blit(tile.surf, tile.rect)
 
-        self.time_delta = self.clock.tick(self.MAX_FPS)
-        self.tick_delta_ms += self.time_delta
+        if self.state == GameState.GAME_OVER:
+            assert self.game_over_data is not None
+            self.game_over_data.last_frame = self.display_surface.copy()
 
     def _update_gameover(self) -> None:
         assert self.game_over_data is not None
-        TRANSITION_MS = 10000
+        assert self.game_over_data.last_frame is not None
+        TRANSITION_MS = 500
+        t = 1 - (1 - min(self.tick_delta_ms / TRANSITION_MS, 1)) ** 4
         self.display_surface.blit(self.game_over_data.last_frame, (0, 0))
-        self.game_over_data.dark_overlay.fill(
-            (0, 0, 0, int(200 * self.time_delta / TRANSITION_MS))
-        )
+        self.game_over_data.dark_overlay.fill((0, 0, 0, int(200 * t)))
         self.display_surface.blit(self.game_over_data.dark_overlay, (0, 0))
 
     def game_over(self, reason: str, tips: str) -> None:
         self.state = GameState.GAME_OVER
         self.game_over_data = GameOverData(
-            self.display_surface.copy(),
+            None,
             reason,
             tips,
             pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA),
         )
-        self.time_delta = 0
+        self.tick_delta_ms = 0
 
     def update(self) -> bool:
         """
@@ -202,7 +203,8 @@ class Game:
             case GameState.GAME_OVER:
                 self._update_gameover()
         pygame.display.update()
-
+        self.time_delta = self.clock.tick(self.MAX_FPS)
+        self.tick_delta_ms += self.time_delta
         return False
 
     def try_move_tile(self, x: int, y: int, dx: int, dy: int) -> bool:
