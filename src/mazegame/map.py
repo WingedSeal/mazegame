@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Type, TypeVar
+from typing import TYPE_CHECKING, Type, TypeVar, override
 
 import pygame
 
@@ -49,6 +49,9 @@ class Tile(ABC, pygame.sprite.Sprite):
             self.tile_size * pos[1] + padding[1],
         )
 
+    def drop(self) -> None:
+        pass
+
     def get_top_left(self, pos: tuple[int, int]) -> tuple[int, int]:
         return self._pos_to_pixel(pos)
 
@@ -84,10 +87,9 @@ T = TypeVar("T", bound=Tile)
 
 
 class TouchableTile(Tile):
-    can_be_under = True
 
     @abstractmethod
-    def interact(self, other_tile: Tile, game: "Game") -> None:
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         pass
 
 
@@ -111,7 +113,7 @@ class ColoredFloor(TouchableTile, GetColor):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        if self.color.value in self.surfs:
+        if self.color in self.surfs:
             self.surf = self.surfs[self.color]
         else:
             self.surf = pygame.Surface((tile_size, tile_size))
@@ -120,7 +122,7 @@ class ColoredFloor(TouchableTile, GetColor):
 
         self.rect = self.surf.get_rect()
 
-    def interact(self, other_tile: Tile, game: "Game") -> None:
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         pass
 
     def get_color(self) -> Color:
@@ -172,7 +174,7 @@ class Player(TouchableTile):
             pos, padding=(int(self.tile_size * 0.05), int(self.tile_size * 0.05))
         )
 
-    def interact(self, other_tile: Tile, game: "Game") -> None:
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         if isinstance(other_tile, Enemy):
             game.game_over("You died, enemy ran into you", "NAH")
 
@@ -212,7 +214,7 @@ class Enemy(TouchableTile):
             type(self).surf.fill((255, 0, 255))
         self.rect = self.surf.get_rect()
 
-    def interact(self, other_tile: Tile, game: "Game") -> None:
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         if not isinstance(other_tile, Player):
             return
 

@@ -289,14 +289,15 @@ class Game:
         tile.old_pos = tile.pos
         tile.pos = (x + dx, y + dy)
         self.map.map[y + dy][x + dx] = tile
+        if tile.tile_under is not None:
+            tile.drop()
         self.map.map[y][x] = tile.tile_under
         tile.tile_under = None
         self.moving_tiles.append(tile)
 
         if isinstance(target, TouchableTile):
-            target.interact(tile, self)
-            if target.can_be_under:
-                tile.tile_under = target
+            target.interacted_with(tile, self)
+            tile.tile_under = target
         return True
 
     def render_map(self) -> None:

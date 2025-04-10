@@ -18,7 +18,7 @@ HARD1 = Map(
         [Block(), None, None, Block()],
         [Block(), None, Block(), Block()],
         [Block(), None, Block(), Block()],
-        [Block(), None, Block(), Block()],
+        [Block(), ColoredFloor(Color.RED), Block(), Block()],
         [Block(), ENEMY, Block(), Block()],
         [Block(), Player(), Block(), Block()],
     ]
