@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Type, TypeVar, override
 
 import pygame
 
+
 if TYPE_CHECKING:
     from .game import Game
 
@@ -142,13 +143,12 @@ class ColoredBlock(Tile, GetColor):
     def init(self, pos: tuple[int, int], tile_size: int) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        if self.color.value in self.surfs:
+        if self.color in self.surfs:
             self.surf = self.surfs[self.color]
         else:
             self.surf = pygame.Surface((tile_size, tile_size))
             self.surf.fill(self.color.value)
             self.surfs[self.color] = self.surf
-
         self.rect = self.surf.get_rect()
 
     def get_color(self) -> Color:
@@ -165,24 +165,79 @@ class Player(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if not hasattr(type(self), "surf"):
-            type(self).surf = pygame.Surface((tile_size * 0.9, tile_size * 0.9))
-            type(self).surf.fill((255, 0, 0))
+            type(self).surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            type(self).surf.fill(
+                (255, 0, 0),
+                (
+                    tile_size * 0.05,
+                    tile_size * 0.05,
+                    tile_size * 0.90,
+                    tile_size * 0.90,
+                ),
+            )
         self.rect = self.surf.get_rect()
-
-    def get_top_left(self, pos: tuple[int, int]) -> tuple[int, int]:
-        return self._pos_to_pixel(
-            pos, padding=(int(self.tile_size * 0.05), int(self.tile_size * 0.05))
-        )
 
     def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         if isinstance(other_tile, Enemy):
             game.game_over("You died, enemy ran into you", "NAH")
 
 
-class Door(Tile):
+class Door(Tile, GetColor):
+    surfs: dict[Color, pygame.Surface] = {}
+
     def __init__(self, color: Color) -> None:
         self.color = color
+        self.tile_under = DoorFrame(self)
         super().__init__()
+
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if self.color in self.surfs:
+            self.surf = self.surfs[self.color]
+        else:
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            self.surf.fill(
+                (100, 100, 100),
+                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.8, tile_size * 0.6),
+            )
+            self.surfs[self.color] = self.surf
+        self.rect = self.surf.get_rect()
+
+    def get_color(self) -> Color:
+        return self.color
+
+
+class DoorFrame(TouchableTile, GetColor):
+    surfs: dict[Color, pygame.Surface] = {}
+
+    def __init__(self, door: Door) -> None:
+        self.color = door.color
+        self.door = door
+
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if self.color in self.surfs:
+            self.surf = self.surfs[self.color]
+        else:
+            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf.fill(
+                self.color.value,
+                (0, 0, tile_size * 0.1, tile_size),
+            )
+            self.surf.fill(
+                self.color.value,
+                (tile_size * 0.9, 0, tile_size * 0.1, tile_size),
+            )
+            self.surfs[self.color] = self.surf
+        self.rect = self.surf.get_rect()
+
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
+        pass
+
+    def get_color(self) -> Color:
+        return self.color
 
 
 class Key(TouchableTile):
@@ -252,6 +307,3 @@ class Map:
                 if isinstance(tile, cls):
                     tiles.append(tile)
         return tiles
-
-
-# TODO: MAKE SURE ALL INSTANCES SHARE A SURFACE, split init into per class (tile_size) and per instance

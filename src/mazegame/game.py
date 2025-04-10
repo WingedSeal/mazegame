@@ -98,6 +98,11 @@ class Game:
             for x, tile in enumerate(row):
                 if tile is not None:
                     tile.init((x, y), self.tile_size)
+                    if tile.tile_under is not None:
+                        tile.tile_under.init((x, y), self.tile_size)
+                        tile.tile_under.rect.topleft = tile.tile_under.get_top_left(
+                            (x, y)
+                        )
                     tile.rect.topleft = tile.get_top_left((x, y))
 
     def _get_tile_size(self) -> tuple[int, int, int]:
@@ -289,9 +294,9 @@ class Game:
         tile.old_pos = tile.pos
         tile.pos = (x + dx, y + dy)
         self.map.map[y + dy][x + dx] = tile
+        self.map.map[y][x] = tile.tile_under
         if tile.tile_under is not None:
             tile.drop()
-        self.map.map[y][x] = tile.tile_under
         tile.tile_under = None
         self.moving_tiles.append(tile)
 
