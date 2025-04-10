@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
+from pathlib import Path
 import random
 import sys
 import threading
@@ -36,9 +37,18 @@ class GameState(Enum):
 @dataclass
 class GameOverData:
     last_frame: pygame.Surface | None
-    reason: str
-    tips: str
     dark_overlay: pygame.Surface
+    heading_surface: pygame.Surface
+    subheading_surface: pygame.Surface
+    tips_surface: pygame.Surface
+
+
+@dataclass
+class GameFont:
+    PATH = Path(__file__).parent / "font.ttf"
+    heading: pygame.font.Font
+    subheading: pygame.font.Font
+    tips: pygame.font.Font
 
 
 class Game:
@@ -63,8 +73,17 @@ class Game:
         self.players = map.get_tiles(Player)
         for i, player in enumerate(self.players):
             player.index = i
-        self.game_event.set()
         pygame.init()
+        pygame.font.init()
+        self.fonts = GameFont(
+            heading=pygame.font.SysFont("Times New Roman", 40),
+            subheading=pygame.font.SysFont("Times New Roman", 20),
+            tips=pygame.font.SysFont("Times New Roman", 10),
+            # heading=pygame.font.Font(GameFont.PATH, 20),
+            # subheading=pygame.font.Font(GameFont.PATH, 20),
+            # tips=pygame.font.Font(GameFont.PATH, 20),
+        )
+        self.game_event.set()
         self.map = map
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         self.display_surface = pygame.display.set_mode(
@@ -193,14 +212,34 @@ class Game:
         )
         self.game_over_data.dark_overlay.fill((0, 0, 0, int(200 * t_darken)))
         self.display_surface.blit(self.game_over_data.dark_overlay, (0, 0))
+        center = self.display_surface.get_rect().center
+        self.display_surface.blit(
+            self.game_over_data.heading_surface,
+            self.game_over_data.heading_surface.get_rect(
+                center=(center[0], center[1] - 20)
+            ),
+        )
+        self.display_surface.blit(
+            self.game_over_data.subheading_surface,
+            self.game_over_data.subheading_surface.get_rect(
+                center=(center[0], center[1] + 20)
+            ),
+        )
+        self.display_surface.blit(
+            self.game_over_data.tips_surface,
+            self.game_over_data.tips_surface.get_rect(
+                center=(center[0], center[1] + 40)
+            ),
+        )
 
     def game_over(self, reason: str, tips: str) -> None:
         self.state = GameState.GAME_OVER
         self.game_over_data = GameOverData(
             None,
-            reason,
-            tips,
             pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA),
+            self.fonts.heading.render("You died!", True, (200, 100, 100)),
+            self.fonts.subheading.render(reason, True, (200, 200, 200)),
+            self.fonts.tips.render(tips, True, (200, 200, 200)),
         )
         self.tick_delta_ms = 0
 
