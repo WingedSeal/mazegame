@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from enum import Enum, auto
 import random
 import sys
 import threading
@@ -8,6 +10,19 @@ from pygame import locals
 from .direction import Direction
 from .map import Enemy, Map, Player, Tile, TouchableTile
 from .control import Control
+
+
+class GameState(Enum):
+    GAMEPLAY = auto()
+    GAME_OVER = auto()
+
+
+@dataclass
+class GameOverData:
+    last_frame: pygame.Surface
+    reason: str
+    tips: str
+    dark_overlay: pygame.Surface
 
 
 class Game:
@@ -25,6 +40,8 @@ class Game:
     is_control_alive = True
 
     def __init__(self, map: Map) -> None:
+        self.state = GameState.GAMEPLAY
+        self.game_over_data: GameOverData | None = None
         self.control = Control(map, self)
         self.enemies = map.get_tiles(Enemy)
         self.players = map.get_tiles(Player)
@@ -116,18 +133,7 @@ class Game:
             )
             enemy.index = (enemy.index + 1) % len(enemy.path)
 
-    def update(self) -> bool:
-        """
-        The game logic that occurs within a frame.
-
-        :return: Whether the game should end
-        """
-
-        for event in pygame.event.get():
-            if event.type == locals.QUIT:
-                self.teardown()
-                return True
-
+    def _update_gameplay(self) -> None:
         self.display_surface.fill(self.BG_COLOR)
 
         if self.tick_delta_ms > self.MSPT:
@@ -156,9 +162,47 @@ class Game:
                 self.display_surface.blit(tile.tile_under.surf, tile.tile_under.rect)
             self.display_surface.blit(tile.surf, tile.rect)
 
-        pygame.display.update()
         self.time_delta = self.clock.tick(self.MAX_FPS)
         self.tick_delta_ms += self.time_delta
+
+    def _update_gameover(self) -> None:
+        assert self.game_over_data is not None
+        TRANSITION_MS = 10000
+        self.display_surface.blit(self.game_over_data.last_frame, (0, 0))
+        self.game_over_data.dark_overlay.fill(
+            (0, 0, 0, int(200 * self.time_delta / TRANSITION_MS))
+        )
+        self.display_surface.blit(self.game_over_data.dark_overlay, (0, 0))
+
+    def game_over(self, reason: str, tips: str) -> None:
+        self.state = GameState.GAME_OVER
+        self.game_over_data = GameOverData(
+            self.display_surface.copy(),
+            reason,
+            tips,
+            pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA),
+        )
+        self.time_delta = 0
+
+    def update(self) -> bool:
+        """
+        The game logic that occurs within a frame.
+
+        :return: Whether the game should end
+        """
+
+        for event in pygame.event.get():
+            if event.type == locals.QUIT:
+                self.teardown()
+                return True
+
+        match self.state:
+            case GameState.GAMEPLAY:
+                self._update_gameplay()
+            case GameState.GAME_OVER:
+                self._update_gameover()
+        pygame.display.update()
+
         return False
 
     def try_move_tile(self, x: int, y: int, dx: int, dy: int) -> bool:
@@ -189,7 +233,7 @@ class Game:
         self.moving_tiles.append(tile)
 
         if isinstance(target, TouchableTile):
-            target.interact(tile)
+            target.interact(tile, self)
             if target.can_be_under:
                 tile.tile_under = target
         return True

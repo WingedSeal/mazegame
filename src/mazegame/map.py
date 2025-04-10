@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Type, TypeVar
+from typing import TYPE_CHECKING, Type, TypeVar
 
 import pygame
+
+if TYPE_CHECKING:
+    from .game import Game
 
 from .direction import Direction
 from .color import Color
@@ -84,7 +87,7 @@ class TouchableTile(Tile):
     can_be_under = True
 
     @abstractmethod
-    def interact(self, other_tile: Tile) -> None:
+    def interact(self, other_tile: Tile, game: "Game") -> None:
         pass
 
 
@@ -117,7 +120,7 @@ class ColoredFloor(TouchableTile, GetColor):
 
         self.rect = self.surf.get_rect()
 
-    def interact(self, other_tile: Tile) -> None:
+    def interact(self, other_tile: Tile, game: "Game") -> None:
         pass
 
     def get_color(self) -> Color:
@@ -169,7 +172,7 @@ class Player(TouchableTile):
             pos, padding=(int(self.tile_size * 0.05), int(self.tile_size * 0.05))
         )
 
-    def interact(self, other_tile: Tile) -> None:
+    def interact(self, other_tile: Tile, game: "Game") -> None:
         if isinstance(other_tile, Enemy):
             raise NotImplementedError("You died, enemy ran into you")
 
@@ -209,8 +212,11 @@ class Enemy(TouchableTile):
             type(self).surf.fill((255, 0, 255))
         self.rect = self.surf.get_rect()
 
-    def interact(self, other_tile: Tile) -> None:
-        raise NotImplementedError("YOU DIED")
+    def interact(self, other_tile: Tile, game: "Game") -> None:
+        if not isinstance(other_tile, Player):
+            return
+
+        game.game_over("YOU RAN INTO ENEMY", "NOPE")
 
 
 class Map:
