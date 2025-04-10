@@ -240,7 +240,7 @@ class Game:
             pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA),
             self.fonts.heading.render("You died!", True, (200, 100, 100)),
             self.fonts.subheading.render(reason, True, (200, 200, 200)),
-            self.fonts.tips.render(tips, True, (200, 200, 200)),
+            self.fonts.tips.render("Tips: " + tips, True, (200, 200, 200)),
         )
         self.tick_delta_ms = 0
 
