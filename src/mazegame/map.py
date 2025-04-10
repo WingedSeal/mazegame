@@ -174,7 +174,7 @@ class Player(TouchableTile):
 
     def interact(self, other_tile: Tile, game: "Game") -> None:
         if isinstance(other_tile, Enemy):
-            raise NotImplementedError("You died, enemy ran into you")
+            game.game_over("You died, enemy ran into you", "NAH")
 
 
 class Door(Tile):

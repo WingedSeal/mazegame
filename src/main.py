@@ -2,10 +2,7 @@ from mazegame import *
 
 
 def script():
-    move(UP)
-    move(UP)
-    move(UP)
-    move(UP)
+
     while get_tile(UP) != ENEMY:
         move(HALT)
     while get_tile(UP) == ENEMY:
@@ -17,6 +14,7 @@ def script():
         else:
             move(UP)
             count += 1
+
     move(RIGHT)
     while get_tile(LEFT) != ENEMY:
         move(HALT)

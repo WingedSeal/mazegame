@@ -6,10 +6,26 @@ import threading
 from typing import TYPE_CHECKING
 import pygame
 from pygame import locals
+import numpy as np
+import scipy
+from scipy.ndimage import gaussian_filter
 
 from .direction import Direction
 from .map import Enemy, Map, Player, Tile, TouchableTile
 from .control import Control
+
+
+def apply_blur(surface: pygame.Surface, radius: float) -> pygame.Surface:
+    """
+    Apply guassian blur to a surface
+
+    :param surface: Original surface
+    :param radius: How blurly it should be, defaults to 1
+    :return: Blured surface
+    """
+    surf_array = pygame.surfarray.array3d(surface)
+    blurred = gaussian_filter(surf_array, sigma=(radius, radius, 0))
+    return pygame.surfarray.make_surface(blurred.astype(np.uint8))
 
 
 class GameState(Enum):
@@ -170,9 +186,12 @@ class Game:
         assert self.game_over_data is not None
         assert self.game_over_data.last_frame is not None
         TRANSITION_MS = 500
-        t = 1 - (1 - min(self.tick_delta_ms / TRANSITION_MS, 1)) ** 4
-        self.display_surface.blit(self.game_over_data.last_frame, (0, 0))
-        self.game_over_data.dark_overlay.fill((0, 0, 0, int(200 * t)))
+        t = min(self.tick_delta_ms / TRANSITION_MS, 1)
+        t_darken = 1 - (1 - t) ** 4
+        self.display_surface.blit(
+            apply_blur(self.game_over_data.last_frame, t * 4), (0, 0)
+        )
+        self.game_over_data.dark_overlay.fill((0, 0, 0, int(200 * t_darken)))
         self.display_surface.blit(self.game_over_data.dark_overlay, (0, 0))
 
     def game_over(self, reason: str, tips: str) -> None:
