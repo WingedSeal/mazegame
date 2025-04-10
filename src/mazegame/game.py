@@ -200,6 +200,7 @@ class Game:
         if self.state == GameState.GAME_OVER:
             assert self.game_over_data is not None
             self.game_over_data.last_frame = self.display_surface.copy()
+            self.tick_delta_ms = 0
 
     def _update_gameover(self) -> None:
         assert self.game_over_data is not None
