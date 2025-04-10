@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import random
 from typing import TYPE_CHECKING, Type, TypeVar, override
 
 
@@ -179,8 +180,20 @@ class Player(TouchableTile):
         self.rect = self.surf.get_rect()
 
     def interacted_with(self, other_tile: Tile, game: "Game") -> None:
-        if isinstance(other_tile, Enemy):
-            game.game_over("You died, enemy ran into you", "NAH")
+        if not isinstance(other_tile, Enemy):
+            return
+        game.game_over(
+            "Enemy ran into you.",
+            random.choice(
+                [
+                    "That plan did not go well",
+                    "Consider not dying, that's not a great plan",
+                    '"Avoid collision" was a suggestion, apparently.',
+                    "Dying isn't good for your health.",
+                    "You have to be alive to win by the way.",
+                ]
+            ),
+        )
 
 
 class Door(Tile, GetColor):
@@ -299,7 +312,20 @@ class Enemy(TouchableTile):
         if not isinstance(other_tile, Player):
             return
 
-        game.game_over("YOU RAN INTO ENEMY", "NOPE")
+        game.game_over(
+            "You ran into enemy.",
+            random.choice(
+                [
+                    "Stop touching people.",
+                    "Invisibilty doesn't matter if you are running into them.",
+                    "Dying isn't good for your health.",
+                    "Consider not doing that.",
+                    "They were just standing there. Why?",
+                    "Avoid collisions.",
+                    "Your enemies are not walls. Stop treating them as such.",
+                ]
+            ),
+        )
 
 
 class Map:
