@@ -4,12 +4,11 @@ from pathlib import Path
 import random
 import sys
 import threading
-from typing import TYPE_CHECKING
 import pygame
 from pygame import locals
 import numpy as np
-import scipy
 from scipy.ndimage import gaussian_filter
+
 
 from .direction import Direction
 from .map import Enemy, Map, Player, Tile, TouchableTile
