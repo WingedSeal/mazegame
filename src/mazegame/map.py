@@ -44,6 +44,7 @@ class Tile(ABC, pygame.sprite.Sprite):
     pos: tuple[int, int] = (0, 0)
     old_pos: tuple[int, int] = (0, 0)
     tile_under: "Tile | None" = None
+    _auto_remove: bool = False
 
     @abstractmethod
     def init(
@@ -247,12 +248,17 @@ class Player(TouchableTile):
         )
 
 
+_HIDEN_KEY = object()
+
+
 class Door(Tile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
-    def __init__(self, color: Color) -> None:
+    def __init__(self, color: Color, *, open: bool = False) -> None:
         self.color = color
-        self.tile_under = DoorFrame(self)
+        self.tile_under = DoorFrame(self, _HIDEN_KEY)
+        if open:
+            self._auto_remove = True
         super().__init__()
 
     def init(
@@ -293,7 +299,9 @@ class Door(Tile, HasColor):
 class DoorFrame(TouchableTile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
-    def __init__(self, door: Door) -> None:
+    def __init__(self, door: Door, _hiden_key: object) -> None:
+        if _hiden_key is not _HIDEN_KEY:
+            raise Exception("Do not construct DoorFrame object manually.")
         self.color = door.color
         self.door = door
 

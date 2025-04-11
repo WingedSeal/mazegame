@@ -107,14 +107,16 @@ class Game:
         """Time delta in milisecond"""
         for y, row in enumerate(self.map.map):
             for x, tile in enumerate(row):
-                if tile is not None:
-                    tile.init((x, y), self.tile_size, self.surfs)
-                    if tile.tile_under is not None:
-                        tile.tile_under.init((x, y), self.tile_size, self.surfs)
-                        tile.tile_under.rect.topleft = tile.tile_under.get_top_left(
-                            (x, y)
-                        )
-                    tile.rect.topleft = tile.get_top_left((x, y))
+                if tile is None:
+                    continue
+
+                tile.init((x, y), self.tile_size, self.surfs)
+                if tile.tile_under is not None:
+                    tile.tile_under.init((x, y), self.tile_size, self.surfs)
+                    tile.tile_under.rect.topleft = tile.tile_under.get_top_left((x, y))
+                tile.rect.topleft = tile.get_top_left((x, y))
+                if tile._auto_remove:
+                    self.map.map[y][x] = tile.tile_under
 
     def _get_tile_size(self) -> tuple[int, int, int]:
         """

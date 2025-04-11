@@ -10,9 +10,9 @@ NORMAL3_1 = Map(
         [
             Exit(),
             Lock(color3),
-            DoorFrame(Door(color3)),
+            Door(color3, open=True),
             None,
-            DoorFrame(Door(color4)),
+            Door(color4, open=True),
             Lock(color4),
             Spike(),
         ],
@@ -24,4 +24,23 @@ NORMAL3_1 = Map(
     ]
 )
 
-NORMAL3 = NORMAL3_1
+NORMAL3_2 = Map(
+    [
+        [
+            Spike(),
+            Lock(color3),
+            Door(color3, open=True),
+            None,
+            Door(color4, open=True),
+            Lock(color4),
+            Exit(),
+        ],
+        [Block(), Block(), Block(), ColoredFloor(color2), Block(), Block(), Block()],
+        [Block(), Block(), Block(), None, Block(), Block(), Block()],
+        [Block(), Block(), Block(), None, Block(), Block(), Block()],
+        [Block(), Block(), Block(), ColoredFloor(color1), Block(), Block(), Block()],
+        [Block(), Block(), Block(), Player(), Block(), Block(), Block()],
+    ]
+)
+
+NORMAL3 = [NORMAL3_1, NORMAL3_2]
