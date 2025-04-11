@@ -242,7 +242,7 @@ class Player(TouchableTile):
                     "Consider not dying, that's not a great plan",
                     '"Avoid collision" was a suggestion, apparently.',
                     "Dying isn't good for your health.",
-                    "You have to be alive to win by the way.",
+                    "You have to be alive to win, by the way.",
                 ]
             ),
         )

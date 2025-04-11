@@ -5,4 +5,4 @@ def script():
     return
 
 
-run(script, HARD1)
+run(script, NORMAL4)
