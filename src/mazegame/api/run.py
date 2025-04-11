@@ -6,7 +6,7 @@ from typing import Callable
 from ..color import Color
 from ..direction import Direction
 from ..game import Game
-from ..map import ColorTile, Map, Tile
+from ..map import HasColor, Map, Tile
 from .game_obj import get_game
 from . import game_obj
 
@@ -50,7 +50,7 @@ def get_color(
     :return: Tile or None
     """
     tile = get_game().get_tile(direction, player_index)
-    if not isinstance(tile, ColorTile):
+    if not isinstance(tile, HasColor):
         return None
 
     return tile.get_color()

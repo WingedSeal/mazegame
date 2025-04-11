@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 from .direction import Direction
 from .color import Color
 
-SurfsType = dict[type["Tile"] | tuple[type["ColorTile"], Color], pygame.Surface]
+SurfsType = dict[type["Tile"] | tuple[type["HasColor"], Color], pygame.Surface]
 
 
 def _lerp(a: tuple[float, float], b: tuple[float, float], t: float) -> tuple[int, int]:
@@ -87,7 +87,7 @@ class Tile(ABC, pygame.sprite.Sprite):
     #     return str(self)
 
 
-class ColorTile:
+class HasColor:
     @abstractmethod
     def get_color(self) -> Color:
         pass
@@ -117,7 +117,7 @@ class Block(Tile):
         self.rect = self.surf.get_rect()
 
 
-class ColoredFloor(TouchableTile, ColorTile):
+class ColoredFloor(TouchableTile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -150,7 +150,7 @@ class ColoredFloor(TouchableTile, ColorTile):
         return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
-class ColoredBlock(Tile, ColorTile):
+class ColoredBlock(Tile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -224,7 +224,7 @@ class Player(TouchableTile):
         )
 
 
-class Door(Tile, ColorTile):
+class Door(Tile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -255,7 +255,7 @@ class Door(Tile, ColorTile):
         return self.color
 
 
-class DoorFrame(TouchableTile, ColorTile):
+class DoorFrame(TouchableTile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, door: Door) -> None:
@@ -292,7 +292,7 @@ class DoorFrame(TouchableTile, ColorTile):
         return self.color
 
 
-class Key(TouchableTile, ColorTile):
+class Key(TouchableTile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:

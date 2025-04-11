@@ -12,7 +12,7 @@ from scipy.ndimage import gaussian_filter
 
 from .color import Color
 from .direction import Direction
-from .map import ColorTile, Enemy, Map, Player, SurfsType, Tile, TouchableTile
+from .map import HasColor, Enemy, Map, Player, SurfsType, Tile, TouchableTile
 from .control import Control
 
 
