@@ -286,7 +286,29 @@ class Key(TouchableTile):
 
 
 class Spike(TouchableTile):
-    pass
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if not hasattr(type(self), "surf"):
+            type(self).surf = pygame.Surface((tile_size, tile_size))
+            type(self).surf.fill((255, 0, 255))
+        self.rect = self.surf.get_rect()
+
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
+        if not isinstance(other_tile, Player):
+            return
+
+        game.game_over(
+            "You ran into a spike.",
+            random.choice(
+                [
+                    "Did that spike not lsook dangerous.",
+                    "It wasn't even moving.",
+                    "Dying isn't good for your health.",
+                    "Consider not doing that.",
+                ]
+            ),
+        )
 
 
 class Exit(TouchableTile):
@@ -313,7 +335,7 @@ class Enemy(TouchableTile):
             return
 
         game.game_over(
-            "You ran into enemy.",
+            "You ran into an enemy.",
             random.choice(
                 [
                     "Stop touching people.",
@@ -321,7 +343,7 @@ class Enemy(TouchableTile):
                     "Dying isn't good for your health.",
                     "Consider not doing that.",
                     "They were just standing there. Why?",
-                    "Avoid collisions.",
+                    "Avoid collisions!",
                     "Your enemies are not walls. Stop treating them as such.",
                 ]
             ),
