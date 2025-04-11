@@ -9,3 +9,9 @@ TUTORIAL5 = Map(
         [Block(), Player(), Block(), Player(), None],
     ]
 )
+
+
+# def script():
+#     move(RIGHT)
+#     move(UP)
+#     move(UP)

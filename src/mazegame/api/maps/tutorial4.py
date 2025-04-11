@@ -12,3 +12,8 @@ TUTORIAL4 = Map(
         [Block(), Key(color), Block()],
     ]
 )
+
+# def script():
+#     move(DOWN)
+#     for _ in range(3):
+#         move(UP)

@@ -13,3 +13,9 @@ TUTORIAL3 = Map(
         [Block(), Block(), Player(), Block()],
     ]
 )
+
+# def script():
+#     while get_tile(UP) == ENEMY:
+#         wait()
+#     move(UP)
+#     move(UP)
