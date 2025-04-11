@@ -1,5 +1,6 @@
 import sys
 
+from mazegame.direction import Direction
 from mazegame.game import GameState  # noqa
 
 sys.path.append("./src")  # noqa
@@ -41,3 +42,21 @@ class TestWinLost(unittest.TestCase):
 
         game = _test_run(script, map, exit_on_tick=1)
         self.assertEqual(game.state, GameState.VICTORY)
+
+    def test_run_into_enemy(self) -> None:
+        map = Map([[Player(), Enemy(path=[])]])
+
+        def script():
+            move(RIGHT)
+
+        game = _test_run(script, map, exit_on_tick=1)
+        self.assertEqual(game.state, GameState.GAME_OVER)
+
+    def test_enemy_run_into_player(self) -> None:
+        map = Map([[Player(), Enemy(path=[Direction.LEFT])]])
+
+        def script():
+            return
+
+        game = _test_run(script, map, exit_on_tick=1)
+        self.assertEqual(game.state, GameState.GAME_OVER)
