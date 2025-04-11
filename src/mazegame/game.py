@@ -71,10 +71,10 @@ class Game:
     next_moves: list[tuple[int, int, int, int]] = []
     """Moves set by Control (pos_x, pos_y, dx, dy)"""
     is_control_alive = True
-    surfs: SurfsType = {}
     _exit_on_tick: int | None = None
 
     def __init__(self, map: Map) -> None:
+        self.surfs: SurfsType = {}
         self.state = GameState.GAMEPLAY
         self.game_over_data: GameOverData | None = None
         self.victory_data: VictoryData | None = None
