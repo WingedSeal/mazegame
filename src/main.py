@@ -5,4 +5,4 @@ def script():
     pass
 
 
-run(script, TUTORIAL5)
+run(script, NORMAL2)
