@@ -1,6 +1,7 @@
 from .hard1 import HARD1
 from .normal1 import NORMAL1
 from .normal2 import NORMAL2
+from .normal3 import NORMAL3
 from .tutorial1 import TUTORIAL1
 from .tutorial2 import TUTORIAL2
 from .tutorial3 import TUTORIAL3

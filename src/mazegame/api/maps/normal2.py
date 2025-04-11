@@ -1,7 +1,5 @@
 import random
-from ...direction import Direction
-from ...color import Color
-from ...map import Door, Enemy, Exit, Key, Map, Block, Player, Spike
+from ...map import Exit, Map, Block, Player, Spike
 
 
 map = [

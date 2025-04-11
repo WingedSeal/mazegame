@@ -14,6 +14,7 @@ from mazegame.map import (
     Enemy,
     Exit,
     Key,
+    Lock,
     Map,
     Player,
     Spike,
@@ -33,11 +34,11 @@ class TestBasicRender(unittest.TestCase):
                 [Block(), None, Spike()],
                 [Player(), Enemy(path=[]), Door(Color.RED)],
                 [Exit(), ColoredBlock(Color.RED), ColoredFloor(Color.RED)],
-                [Key(Color.RED), None, None],
+                [Key(Color.RED), Lock(Color.RED), None],
             ]
         )
-        _test_run(empty_script, map, exit_on_tick=1)
-        # _test_run(empty_script, map, exit_on_tick=None, is_render=True)
+        # _test_run(empty_script, map, exit_on_tick=1)
+        _test_run(empty_script, map, exit_on_tick=None, is_render=True)
 
 
 if __name__ == "__main__":

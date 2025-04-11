@@ -404,6 +404,93 @@ class Key(TouchableTile, HasColor):
         return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
+class Lock(TouchableTile, HasColor):
+    surfs: dict[Color, pygame.Surface] = {}
+
+    def __init__(self, color: Color) -> None:
+        self.color = color
+        super().__init__()
+
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
+        if not isinstance(other_tile, Player):
+            return
+        other_tile.tile_under = None
+        for y, row in enumerate(game.map.map):
+            for x, tile in enumerate(row):
+                if isinstance(tile, DoorFrame) and tile.color == self.color:
+                    game.map.map[y][x] = tile.door
+
+    def init(
+        self,
+        pos: tuple[int, int],
+        tile_size: int,
+        surfs: SurfsType,
+    ) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if (type(self), self.color) not in surfs:
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            pygame.draw.circle(
+                self.surf,
+                self.color.value,
+                (tile_size // 2, int(0.4 * tile_size)),
+                int(0.1 * tile_size),
+            )
+            pygame.draw.circle(
+                self.surf,
+                (0, 0, 0, 0),
+                (tile_size // 2, int(0.4 * tile_size)),
+                int(0.075 * tile_size),
+            )
+            self.surf.fill(
+                (0, 0, 0, 0),
+                (
+                    tile_size * 0.4,
+                    tile_size * 0.4,
+                    tile_size * 0.2,
+                    tile_size * 0.1,
+                ),
+            )
+            self.surf.fill(
+                self.color.value,
+                (
+                    tile_size * 0.4,
+                    tile_size * 0.4,
+                    tile_size * 0.025,
+                    tile_size * 0.1,
+                ),
+            )
+            self.surf.fill(
+                self.color.value,
+                (
+                    tile_size * 0.575,
+                    tile_size * 0.4,
+                    tile_size * 0.025,
+                    tile_size * 0.1,
+                ),
+            )
+            self.surf.fill(
+                self.color.value,
+                (
+                    tile_size * 0.35,
+                    tile_size * 0.5,
+                    tile_size * 0.3,
+                    tile_size * 0.15,
+                ),
+            )
+
+            surfs[type(self), self.color] = self.surf
+        else:
+            self.surf = surfs[type(self), self.color]
+        self.rect = self.surf.get_rect()
+
+    def get_color(self) -> Color:
+        return self.color
+
+    def __str__(self) -> str:
+        return f"{self.color} {self.__class__.__name__} at {self.pos}"
+
+
 class Spike(TouchableTile):
     def init(
         self,
