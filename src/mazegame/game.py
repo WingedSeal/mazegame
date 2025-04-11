@@ -180,12 +180,13 @@ class Game:
                 continue
             if not enemy.path:
                 continue
-            self.try_move_tile(
-                enemy.pos[0],
-                enemy.pos[1],
-                enemy.path[enemy.index].value[0],
-                enemy.path[enemy.index].value[1],
-            )
+            if enemy.path[enemy.index] != Direction.HALT:
+                self.try_move_tile(
+                    enemy.pos[0],
+                    enemy.pos[1],
+                    enemy.path[enemy.index].value[0],
+                    enemy.path[enemy.index].value[1],
+                )
             enemy.index = (enemy.index + 1) % len(enemy.path)
 
     def _update_gameplay(self) -> None:
@@ -336,6 +337,7 @@ class Game:
         :param dy: Target TIle's y
         :return: Whether it was successful
         """
+        assert dx != 0 or dy != 0
         if y + dy >= self.map.height:
             return False
         if x + dx >= self.map.width:
