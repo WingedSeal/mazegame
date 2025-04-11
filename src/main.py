@@ -2,27 +2,21 @@ from mazegame import *
 
 
 def script():
-    while get_tile(UP) != ENEMY:
-        move(HALT)
-    while get_tile(UP) == ENEMY:
-        move(HALT)
-    count = 0
-    while count < 5:
-        if get_tile(UP) == ENEMY:
-            move(HALT)
-        else:
-            move(UP)
-            count += 1
-
     move(RIGHT)
-    while get_tile(LEFT) != ENEMY:
-        move(HALT)
-    while get_tile(LEFT) == ENEMY:
-        move(HALT)
+    move(DOWN)
     move(LEFT)
-    for _ in range(6):
-        move(UP)
+    move(UP)
+    for _ in range(3):
+        move(LEFT)
+    move(UP)
     move(RIGHT)
+    for _ in range(3):
+        move(DOWN)
+    move(LEFT)
+    for _ in range(2):
+        move(UP)
+    for _ in range(5):
+        move(RIGHT)
 
 
-run(script, HARD1)
+run(script, EXAMPLE1)

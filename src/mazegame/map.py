@@ -367,6 +367,11 @@ class Map:
         self.map = map
         self.height = len(map)
         self.width = len(map[0]) if map else 0
+        for i, row in enumerate(map):
+            if len(row) != self.width:
+                raise ValueError(
+                    f"Expected MxN matrix for map argument ({self.width}x{self.height}). Row {i} has different length ({len(row)})."
+                )
 
     def get_positions(self, cls: Type[Tile]) -> list[tuple[int, int]]:
         """
