@@ -14,11 +14,18 @@ class Control:
     control_event = threading.Event()
 
     def __init__(self, map: Map, game: "Game") -> None:
+        self.is_dead = False
         self.control_event.clear()
         self.game = game
         self.player_positions = map.get_positions(Player)
 
+    def kill(self) -> None:
+        self.is_dead = True
+        self.control_event.set()
+
     def move(self, direction: Direction) -> None:
+        if self.is_dead:
+            return
         match direction:
             case Direction.LEFT | Direction.RIGHT | Direction.UP | Direction.DOWN:
                 self._move(*direction.value)
@@ -28,6 +35,8 @@ class Control:
                 raise ValueError("Invalid Direction")
 
     def _move(self, dx: int, dy: int) -> None:
+        if self.is_dead:
+            return
         self.game.next_moves = [
             (player_pos[0], player_pos[1], dx, dy)
             for player_pos in self.player_positions
@@ -38,6 +47,8 @@ class Control:
         self.control_event.wait()
 
     def _halt(self) -> None:
+        if self.is_dead:
+            return
         self.control_event.clear()
         self.game.game_event.set()
         self.control_event.wait()

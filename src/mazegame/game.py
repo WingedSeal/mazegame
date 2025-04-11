@@ -131,6 +131,7 @@ class Game:
 
     def teardown(self) -> None:
         pygame.quit()
+        self.control.kill()
 
     def _get_tile(self, x: int, y: int) -> Tile | None:
         if x < 0 or x >= self.map.width:
@@ -193,7 +194,7 @@ class Game:
             self.tick_delta_ms -= self.MSPT
             self.tick()
 
-        t = self.tick_delta_ms / self.MSPT
+        t = min(self.tick_delta_ms / self.MSPT, 1)
         for tile in self.moving_tiles:
             tile.animate(t)
         for row in self.map.map:

@@ -1,4 +1,6 @@
-import sys  # noqa
+import sys
+
+from mazegame.game import GameState  # noqa
 
 sys.path.append("./src")  # noqa
 
@@ -24,20 +26,18 @@ def empty_script():
     pass
 
 
-class TestBasicRender(unittest.TestCase):
+class TestWinLost(unittest.TestCase):
     def setUp(self) -> None:
         import os
 
         os.environ["SDL_VIDEODRIVER"] = "dummy"
         return super().setUp()
 
-    def test_all_tile(self):
-        map = Map(
-            [
-                [Block(), None, Spike()],
-                [Player(), Enemy(path=[]), Door(Color.RED)],
-                [Exit(), ColoredBlock(Color.RED), ColoredFloor(Color.RED)],
-                [Key(Color.RED), None, None],
-            ]
-        )
-        _test_run(empty_script, map, exit_on_tick=1)
+    def test_win(self) -> None:
+        map = Map([[Player(), Exit()]])
+
+        def script():
+            move(RIGHT)
+
+        game = _test_run(script, map, exit_on_tick=1)
+        self.assertEqual(game.state, GameState.VICTORY)

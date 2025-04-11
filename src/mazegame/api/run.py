@@ -75,7 +75,7 @@ def _test_run(
     map: Map | list[Map],
     *,
     exit_on_tick: int | None = None,
-    mspt: int | None = None
+    mspt: int | None = 1
 ) -> Game:
     if isinstance(map, list):
         map = random.choice(map)
