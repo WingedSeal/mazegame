@@ -98,6 +98,28 @@ class TestDoor(unittest.TestCase):
             self.assertIsInstance(game.map.map[0][x], DoorFrame)
             self.assertIsInstance(game.map.map[1][x], Door)
 
+    def test_door_open_lock(self):
+        map = Map([[Door(Color.RED), Player(), Key(Color.RED), Lock(Color.RED)]])
+
+        def script():
+            move(RIGHT)
+            move(RIGHT)
+
+        game = _test_run(script, map, exit_on_tick=2)
+        self.assertIsInstance(game.map.map[0][0], Door)
+
+    def test_door_lock_open(self):
+        map = Map(
+            [[Door(Color.RED, open=True), Player(), Lock(Color.RED), Key(Color.RED)]]
+        )
+
+        def script():
+            move(RIGHT)
+            move(RIGHT)
+
+        game = _test_run(script, map, exit_on_tick=2)
+        self.assertIsInstance(game.map.map[0][0], DoorFrame)
+
 
 if __name__ == "__main__":
     unittest.main()

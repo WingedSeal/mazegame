@@ -248,7 +248,7 @@ class Player(TouchableTile):
         )
 
 
-_HIDEN_KEY = object()
+_HIDEN_KEY_DO_NO_INSTANCIATE = object()
 
 
 class Door(Tile, HasColor):
@@ -256,7 +256,7 @@ class Door(Tile, HasColor):
 
     def __init__(self, color: Color, *, open: bool = False) -> None:
         self.color = color
-        self.tile_under = DoorFrame(self, _HIDEN_KEY)
+        self.tile_under = DoorFrame(self, _HIDEN_KEY_DO_NO_INSTANCIATE)
         if open:
             self._auto_remove = True
         super().__init__()
@@ -300,7 +300,7 @@ class DoorFrame(TouchableTile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, door: Door, _hiden_key: object) -> None:
-        if _hiden_key is not _HIDEN_KEY:
+        if _hiden_key is not _HIDEN_KEY_DO_NO_INSTANCIATE:
             raise Exception("Do not construct DoorFrame object manually.")
         self.color = door.color
         self.door = door

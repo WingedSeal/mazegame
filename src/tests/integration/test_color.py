@@ -37,6 +37,16 @@ class TestColors(unittest.TestCase):
         # _test_run(empty_script, map, exit_on_tick=None, is_render=True)
         _test_run(empty_script, map, exit_on_tick=1)
 
+    def test_colored_door(self):
+        map = Map([[Door(color) for color in list(Color)]])
+        # _test_run(empty_script, map, exit_on_tick=None, is_render=True)
+        _test_run(empty_script, map, exit_on_tick=1)
+
+    def test_colored_key(self):
+        map = Map([[Key(color) for color in list(Color)]])
+        # _test_run(empty_script, map, exit_on_tick=None, is_render=True)
+        _test_run(empty_script, map, exit_on_tick=1)
+
 
 if __name__ == "__main__":
     unittest.main()
