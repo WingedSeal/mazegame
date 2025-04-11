@@ -306,6 +306,7 @@ class Spike(TouchableTile):
                     "It wasn't even moving.",
                     "Dying isn't good for your health.",
                     "Consider not doing that.",
+                    "That's the spike!",
                 ]
             ),
         )

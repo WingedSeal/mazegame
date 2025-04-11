@@ -2,21 +2,10 @@ from mazegame import *
 
 
 def script():
-    move(RIGHT)
-    move(DOWN)
-    move(LEFT)
-    move(UP)
-    for _ in range(3):
-        move(LEFT)
-    move(UP)
-    move(RIGHT)
-    for _ in range(3):
-        move(DOWN)
-    move(LEFT)
-    for _ in range(2):
+    while get_color(RIGHT) != PURPLE:
         move(UP)
-    for _ in range(5):
-        move(RIGHT)
+    move(UP)
+    move(RIGHT)
 
 
-run(script, EXAMPLE1)
+run(script, EXAMPLE2)
