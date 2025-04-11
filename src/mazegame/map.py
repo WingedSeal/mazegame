@@ -12,6 +12,8 @@ if TYPE_CHECKING:
 from .direction import Direction
 from .color import Color
 
+SurfsType = dict[type["Tile"] | tuple[type["ColorTile"], Color], pygame.Surface]
+
 
 def _lerp(a: tuple[float, float], b: tuple[float, float], t: float) -> tuple[int, int]:
     return (
@@ -24,12 +26,6 @@ def _dash_lerp(
     a: tuple[float, float], b: tuple[float, float], t: float
 ) -> tuple[int, int]:
     return _lerp(a, b, 1 - (1 - t) ** 4)
-
-
-class GetColor(ABC):
-    @abstractmethod
-    def get_color(self) -> Color:
-        pass
 
 
 class Tile(ABC, pygame.sprite.Sprite):
@@ -45,7 +41,7 @@ class Tile(ABC, pygame.sprite.Sprite):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         pass
 
@@ -91,11 +87,13 @@ class Tile(ABC, pygame.sprite.Sprite):
     #     return str(self)
 
 
-T = TypeVar("T", bound=Tile)
+class ColorTile:
+    @abstractmethod
+    def get_color(self) -> Color:
+        pass
 
 
 class TouchableTile(Tile):
-
     @abstractmethod
     def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         pass
@@ -106,7 +104,7 @@ class Block(Tile):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -119,7 +117,7 @@ class Block(Tile):
         self.rect = self.surf.get_rect()
 
 
-class ColoredFloor(TouchableTile, GetColor):
+class ColoredFloor(TouchableTile, ColorTile):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -130,7 +128,7 @@ class ColoredFloor(TouchableTile, GetColor):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -152,7 +150,7 @@ class ColoredFloor(TouchableTile, GetColor):
         return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
-class ColoredBlock(Tile, GetColor):
+class ColoredBlock(Tile, ColorTile):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -163,7 +161,7 @@ class ColoredBlock(Tile, GetColor):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -189,7 +187,7 @@ class Player(TouchableTile):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -226,7 +224,7 @@ class Player(TouchableTile):
         )
 
 
-class Door(Tile, GetColor):
+class Door(Tile, ColorTile):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -238,7 +236,7 @@ class Door(Tile, GetColor):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -257,7 +255,7 @@ class Door(Tile, GetColor):
         return self.color
 
 
-class DoorFrame(TouchableTile, GetColor):
+class DoorFrame(TouchableTile, ColorTile):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, door: Door) -> None:
@@ -268,7 +266,7 @@ class DoorFrame(TouchableTile, GetColor):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -294,7 +292,7 @@ class DoorFrame(TouchableTile, GetColor):
         return self.color
 
 
-class Key(TouchableTile):
+class Key(TouchableTile, ColorTile):
     surfs: dict[Color, pygame.Surface] = {}
 
     def __init__(self, color: Color) -> None:
@@ -314,7 +312,7 @@ class Key(TouchableTile):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -329,13 +327,16 @@ class Key(TouchableTile):
             self.surf = surfs[type(self), self.color]
         self.rect = self.surf.get_rect()
 
+    def get_color(self) -> Color:
+        return self.color
+
 
 class Spike(TouchableTile):
     def init(
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -370,7 +371,7 @@ class Exit(TouchableTile):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -400,7 +401,7 @@ class Enemy(TouchableTile):
         self,
         pos: tuple[int, int],
         tile_size: int,
-        surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface],
+        surfs: SurfsType,
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
@@ -432,6 +433,9 @@ class Enemy(TouchableTile):
         )
 
 
+TileVar = TypeVar("TileVar", bound=Tile)
+
+
 class Map:
     def __init__(self, map: list[list[Tile | None]]) -> None:
         self.map = map
@@ -456,13 +460,13 @@ class Map:
                     positions.append((x, y))
         return positions
 
-    def get_tiles(self, cls: Type[T]) -> list[T]:
+    def get_tiles(self, cls: Type[TileVar]) -> list[TileVar]:
         """
         Find 1 or more tiles
 
         :return: tiles
         """
-        tiles: list[T] = []
+        tiles: list[TileVar] = []
         for row in self.map:
             for tile in row:
                 if isinstance(tile, cls):

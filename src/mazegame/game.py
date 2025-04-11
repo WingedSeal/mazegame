@@ -10,9 +10,9 @@ from pygame import locals
 import numpy as np
 from scipy.ndimage import gaussian_filter
 
-
+from .color import Color
 from .direction import Direction
-from .map import Enemy, Map, Player, Tile, TouchableTile
+from .map import ColorTile, Enemy, Map, Player, SurfsType, Tile, TouchableTile
 from .control import Control
 
 
@@ -71,7 +71,7 @@ class Game:
     next_moves: list[tuple[int, int, int, int]] = []
     """Moves set by Control (pos_x, pos_y, dx, dy)"""
     is_control_alive = True
-    surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface] = {}
+    surfs: SurfsType = {}
     _exit_on_tick: int | None = None
 
     def __init__(self, map: Map) -> None:

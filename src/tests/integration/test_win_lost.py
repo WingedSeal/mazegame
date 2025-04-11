@@ -36,7 +36,7 @@ class TestWinLost(unittest.TestCase):
         def script():
             move(RIGHT)
 
-        game = _test_run(script, map, exit_on_tick=2)
+        game = _test_run(script, map, exit_on_tick=1)
         self.assertEqual(game.state, GameState.VICTORY)
 
     def test_run_into_enemy(self) -> None:
