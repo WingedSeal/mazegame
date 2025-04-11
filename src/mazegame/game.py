@@ -276,7 +276,7 @@ class Game:
     def game_won(self) -> None:
         self.state = GameState.VICTORY
         victory_msg = random.choice(
-            ["Congrats!", "Wasn't expecting that", "You actually lived!"]
+            ["Congrats!", "Wasn't expecting that.", "You actually lived!", "GG"]
         )
         self.victory_data = VictoryData(
             self.fonts.heading.render("Victory!", True, (100, 200, 100)),
