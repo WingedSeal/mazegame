@@ -158,7 +158,6 @@ class Game:
 
     def tick(self) -> None:
         self.tick_count += 1
-
         for tile in self.moving_tiles:
             tile.animate(1)
         self.moving_tiles = []
@@ -313,6 +312,7 @@ class Game:
         self.time_delta = self.clock.tick(self.MAX_FPS)
         self.tick_delta_ms += self.time_delta
         if self._exit_on_tick is not None and self.tick_count >= self._exit_on_tick:
+            self.teardown()
             return True
         return False
 

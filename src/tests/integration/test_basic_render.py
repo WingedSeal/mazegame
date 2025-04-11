@@ -2,6 +2,7 @@ import sys  # noqa
 
 sys.path.append("./src")  # noqa
 
+import os
 import unittest
 from mazegame import *
 from mazegame.color import Color
@@ -20,16 +21,11 @@ from mazegame.map import (
 from mazegame.api.run import _test_run
 
 
-def empty_script():
+def empty_script(game):
     pass
 
 
 class TestBasicRender(unittest.TestCase):
-    def setUp(self) -> None:
-        import os
-
-        os.environ["SDL_VIDEODRIVER"] = "dummy"
-        return super().setUp()
 
     def test_all_tile(self):
         map = Map(
@@ -41,3 +37,7 @@ class TestBasicRender(unittest.TestCase):
             ]
         )
         _test_run(empty_script, map, exit_on_tick=1)
+
+
+if __name__ == "__main__":
+    unittest.main()

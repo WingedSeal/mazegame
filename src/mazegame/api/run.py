@@ -1,3 +1,4 @@
+import os
 import random
 import threading
 from typing import Callable
@@ -71,12 +72,16 @@ def run(script: Callable[[], None], map: Map | list[Map]) -> None:
 
 
 def _test_run(
-    script: Callable[[], None],
+    script: Callable[[Game], None],
     map: Map | list[Map],
     *,
     exit_on_tick: int | None = None,
-    mspt: int | None = 1
+    mspt: int | None = 1,
+    is_render: bool = False
 ) -> Game:
+    if not is_render:
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
+
     if isinstance(map, list):
         map = random.choice(map)
     game = Game(map)
@@ -87,10 +92,12 @@ def _test_run(
 
     def updated_script() -> None:
         get_game().control.pre_run()
-        script()
+        script(game)
         get_game().control.post_run()
 
     script_thread = threading.Thread(target=updated_script, daemon=True)
     script_thread.start()
     game.run()
+    if not is_render:
+        del os.environ["SDL_VIDEODRIVER"]
     return game
