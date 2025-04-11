@@ -21,6 +21,7 @@ _SPIKE_COLOR = pygame.Color(128, 0, 128)
 _PLAYER_COLOR = pygame.Color(102, 255, 255)
 _EXIT_OUTER_COLOR = pygame.Color(0, 150, 0)
 _EXIT_INNER_COLOR = pygame.Color(102, 255, 102)
+_DOOR_COLOR = pygame.Color(139, 69, 19)
 
 
 def _lerp(a: tuple[float, float], b: tuple[float, float], t: float) -> tuple[int, int]:
@@ -265,8 +266,12 @@ class Door(Tile, HasColor):
         if type(self) not in surfs:
             self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill(
-                (100, 100, 100),
-                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.8, tile_size * 0.6),
+                _DOOR_COLOR,
+                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.35, tile_size * 0.6),
+            )
+            self.surf.fill(
+                _DOOR_COLOR,
+                (tile_size * 0.55, tile_size * 0.2, tile_size * 0.35, tile_size * 0.6),
             )
             surfs[type(self)] = self.surf
         else:
