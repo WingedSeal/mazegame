@@ -6,6 +6,7 @@ from ..map import (
     DoorFrame,
     Enemy,
     Exit,
+    Lock,
     Key,
     Spike,
 )
@@ -35,7 +36,7 @@ EXIT = Exit.__name__
 DOOR = Door.__name__
 DOOR_FRAME = DoorFrame.__name__
 KEY = Key.__name__
-
+LOCK = Lock.__name__
 
 __all__ = [
     "RED",

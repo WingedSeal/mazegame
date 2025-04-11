@@ -2,9 +2,7 @@ from mazegame import *
 
 
 def script():
-    move(RIGHT)
-    move(UP)
-    move(UP)
+    return
 
 
-run(script, TUTORIAL5)
+run(script, HARD1)
