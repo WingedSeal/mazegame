@@ -71,12 +71,18 @@ def run(script: Callable[[], None], map: Map | list[Map]) -> None:
 
 
 def _test_run(
-    script: Callable[[], None], map: Map | list[Map], exit_on_tick: int | None = None
+    script: Callable[[], None],
+    map: Map | list[Map],
+    *,
+    exit_on_tick: int | None = None,
+    mspt: int | None = None
 ) -> Game:
     if isinstance(map, list):
         map = random.choice(map)
     game = Game(map)
     game._exit_on_tick = exit_on_tick
+    if mspt is not None:
+        game.MSPT = mspt  # type: ignore
     game_obj.game = game
 
     def updated_script() -> None:
