@@ -68,3 +68,19 @@ def run(script: Callable[[], None], map: Map | list[Map]) -> None:
     script_thread = threading.Thread(target=updated_script, daemon=True)
     script_thread.start()
     get_game().run()
+
+
+def _test_run(script: Callable[[], None], map: Map | list[Map]) -> Game:
+    if isinstance(map, list):
+        map = random.choice(map)
+    game = Game(map)
+
+    def updated_script() -> None:
+        game.control.pre_run()
+        script()
+        game.control.post_run()
+
+    script_thread = threading.Thread(target=updated_script, daemon=True)
+    script_thread.start()
+    game.run()
+    return game
