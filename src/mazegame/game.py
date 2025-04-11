@@ -31,6 +31,7 @@ def apply_blur(surface: pygame.Surface, radius: float) -> pygame.Surface:
 class GameState(Enum):
     GAMEPLAY = auto()
     GAME_OVER = auto()
+    VICTORY = auto()
 
 
 @dataclass
@@ -40,6 +41,12 @@ class GameOverData:
     heading_surface: pygame.Surface
     subheading_surface: pygame.Surface
     tips_surface: pygame.Surface
+
+
+@dataclass
+class VictoryData:
+    heading_surface: pygame.Surface
+    subheading_surface: pygame.Surface
 
 
 @dataclass
@@ -67,6 +74,7 @@ class Game:
     def __init__(self, map: Map) -> None:
         self.state = GameState.GAMEPLAY
         self.game_over_data: GameOverData | None = None
+        self.victory_data: VictoryData | None = None
         self.control = Control(map, self)
         self.enemies = map.get_tiles(Enemy)
         self.players = map.get_tiles(Player)
@@ -237,6 +245,23 @@ class Game:
             ),
         )
 
+    def _update_victory(self) -> None:
+        assert self.victory_data is not None
+        self.display_surface.fill(self.BG_COLOR)
+        center = self.display_surface.get_rect().center
+        self.display_surface.blit(
+            self.victory_data.heading_surface,
+            self.victory_data.heading_surface.get_rect(
+                center=(center[0], center[1] - 20)
+            ),
+        )
+        self.display_surface.blit(
+            self.victory_data.subheading_surface,
+            self.victory_data.subheading_surface.get_rect(
+                center=(center[0], center[1] + 20)
+            ),
+        )
+
     def game_over(self, reason: str, tips: str) -> None:
         self.state = GameState.GAME_OVER
         self.game_over_data = GameOverData(
@@ -247,6 +272,16 @@ class Game:
             self.fonts.tips.render("Tips: " + tips, True, (200, 200, 200)),
         )
         self.tick_delta_ms = 0
+
+    def game_won(self) -> None:
+        self.state = GameState.VICTORY
+        victory_msg = random.choice(
+            ["Congrats!", "Wasn't expecting that", "You actually lived!"]
+        )
+        self.victory_data = VictoryData(
+            self.fonts.heading.render("Victory!", True, (100, 200, 100)),
+            self.fonts.subheading.render(victory_msg, True, (200, 200, 200)),
+        )
 
     def update(self) -> bool:
         """
@@ -265,6 +300,8 @@ class Game:
                 self._update_gameplay()
             case GameState.GAME_OVER:
                 self._update_gameover()
+            case GameState.VICTORY:
+                self._update_victory()
         pygame.display.update()
         self.time_delta = self.clock.tick(self.MAX_FPS)
         self.tick_delta_ms += self.time_delta

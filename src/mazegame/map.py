@@ -312,7 +312,19 @@ class Spike(TouchableTile):
 
 
 class Exit(TouchableTile):
-    pass
+    def init(self, pos: tuple[int, int], tile_size: int) -> None:
+        self.tile_size = tile_size
+        self.pos = pos
+        if not hasattr(type(self), "surf"):
+            type(self).surf = pygame.Surface((tile_size, tile_size))
+            type(self).surf.fill((0, 255, 0))
+        self.rect = self.surf.get_rect()
+
+    def interacted_with(self, other_tile: Tile, game: "Game") -> None:
+        if not isinstance(other_tile, Player):
+            return
+
+        game.game_won()
 
 
 class Enemy(TouchableTile):
