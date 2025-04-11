@@ -221,6 +221,10 @@ class Game:
             self.tick_delta_ms = 0
 
     def _update_gameover(self) -> None:
+        if self._exit_on_tick is not None:
+            raise Exception(
+                "_exit_on_tick is set but the game is over (lost) before that."
+            )
         assert self.game_over_data is not None
         assert self.game_over_data.last_frame is not None
         TRANSITION_MS = 500
@@ -252,6 +256,10 @@ class Game:
         )
 
     def _update_victory(self) -> None:
+        if self._exit_on_tick is not None:
+            raise Exception(
+                "_exit_on_tick is set but the game is over (win) before that."
+            )
         assert self.victory_data is not None
         self.display_surface.fill(self.BG_COLOR)
         center = self.display_surface.get_rect().center
