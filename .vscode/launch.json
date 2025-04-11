@@ -10,13 +10,6 @@
             "request": "launch",
             "program": "${cwd}/src/main.py",
             "console": "integratedTerminal"
-        },
-        {
-            "name": "Python Debugger: Test",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${cwd}/src/tests/test_all.py",
-            "console": "integratedTerminal"
         }
     ]
 }

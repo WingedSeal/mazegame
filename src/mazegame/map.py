@@ -440,7 +440,7 @@ class Map:
         for i, row in enumerate(map):
             if len(row) != self.width:
                 raise ValueError(
-                    f"Expected MxN matrix for map argument ({self.width}x{self.height}). Row {i} has different length ({len(row)})."
+                    f"Expected MxN matrix for map argument ({self.height}x{self.width}). Row {i} has a length of ({len(row)}) instead of {self.width}."
                 )
 
     def get_positions(self, cls: Type[Tile]) -> list[tuple[int, int]]:

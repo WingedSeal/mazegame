@@ -72,6 +72,7 @@ class Game:
     """Moves set by Control (pos_x, pos_y, dx, dy)"""
     is_control_alive = True
     surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface] = {}
+    _exit_on_tick: int | None = None
 
     def __init__(self, map: Map) -> None:
         self.state = GameState.GAMEPLAY
@@ -102,6 +103,7 @@ class Game:
         self.delta_ms = 0.0
         self.tick_delta_ms = 0.0
         self.moving_tiles: list[Tile] = []
+        self.tick_count = 0
         """Time delta in milisecond"""
         for y, row in enumerate(self.map.map):
             for x, tile in enumerate(row):
@@ -129,7 +131,6 @@ class Game:
 
     def teardown(self) -> None:
         pygame.quit()
-        sys.exit()
 
     def _get_tile(self, x: int, y: int) -> Tile | None:
         if x < 0 or x >= self.map.width:
@@ -153,9 +154,10 @@ class Game:
         while True:
             if self.update():
                 break
-        sys.exit()
 
     def tick(self) -> None:
+        self.tick_count += 1
+
         for tile in self.moving_tiles:
             tile.animate(1)
         self.moving_tiles = []
@@ -173,6 +175,8 @@ class Game:
 
         for enemy in self.enemies:
             if random.random() >= enemy.chance_to_move:
+                continue
+            if not enemy.path:
                 continue
             self.try_move_tile(
                 enemy.pos[0],
@@ -307,6 +311,8 @@ class Game:
         pygame.display.update()
         self.time_delta = self.clock.tick(self.MAX_FPS)
         self.tick_delta_ms += self.time_delta
+        if self._exit_on_tick is not None and self.tick_count >= self._exit_on_tick:
+            return True
         return False
 
     def try_move_tile(self, x: int, y: int, dx: int, dy: int) -> bool:
