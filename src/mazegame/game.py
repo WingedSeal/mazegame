@@ -4,6 +4,7 @@ from pathlib import Path
 import random
 import sys
 import threading
+from typing import Any
 import pygame
 from pygame import locals
 import numpy as np
@@ -70,6 +71,7 @@ class Game:
     next_moves: list[tuple[int, int, int, int]] = []
     """Moves set by Control (pos_x, pos_y, dx, dy)"""
     is_control_alive = True
+    surfs: dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface] = {}
 
     def __init__(self, map: Map) -> None:
         self.state = GameState.GAMEPLAY
@@ -104,9 +106,9 @@ class Game:
         for y, row in enumerate(self.map.map):
             for x, tile in enumerate(row):
                 if tile is not None:
-                    tile.init((x, y), self.tile_size)
+                    tile.init((x, y), self.tile_size, self.surfs)
                     if tile.tile_under is not None:
-                        tile.tile_under.init((x, y), self.tile_size)
+                        tile.tile_under.init((x, y), self.tile_size, self.surfs)
                         tile.tile_under.rect.topleft = tile.tile_under.get_top_left(
                             (x, y)
                         )

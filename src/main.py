@@ -2,10 +2,7 @@ from mazegame import *
 
 
 def script():
-    while get_color(RIGHT) != PURPLE:
-        move(UP)
-    move(UP)
-    move(RIGHT)
+    return
 
 
-run(script, EXAMPLE2)
+run(script, EXAMPLE1)
