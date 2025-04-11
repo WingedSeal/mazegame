@@ -1,6 +1,6 @@
 from ...direction import Direction
 from ...color import Color
-from ...map import ColoredFloor, Door, Enemy, Exit, Key, Map, Block, Player
+from ...map import Door, Enemy, Exit, Key, Map, Block, Player
 
 ENEMY = Enemy(
     [Direction.UP] * 10 + [Direction.DOWN] * 10,
@@ -25,8 +25,6 @@ HARD1 = Map(
 )
 
 # def script():
-#     while get_tile(UP) != ENEMY:
-#         move(HALT)
 #     while get_tile(UP) == ENEMY:
 #         move(HALT)
 #     count = 0
