@@ -267,11 +267,16 @@ class Door(Tile, HasColor):
             self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill(
                 _DOOR_COLOR,
-                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.35, tile_size * 0.6),
+                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.375, tile_size * 0.6),
             )
             self.surf.fill(
                 _DOOR_COLOR,
-                (tile_size * 0.55, tile_size * 0.2, tile_size * 0.35, tile_size * 0.6),
+                (
+                    tile_size * 0.525,
+                    tile_size * 0.2,
+                    tile_size * 0.375,
+                    tile_size * 0.6,
+                ),
             )
             surfs[type(self)] = self.surf
         else:
@@ -306,6 +311,19 @@ class DoorFrame(TouchableTile, HasColor):
             self.surf.fill(
                 self.color.value,
                 (tile_size * 0.9, 0, tile_size * 0.1, tile_size),
+            )
+            self.surf.fill(
+                _DOOR_COLOR,
+                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.025, tile_size * 0.6),
+            )
+            self.surf.fill(
+                _DOOR_COLOR,
+                (
+                    tile_size * 0.875,
+                    tile_size * 0.2,
+                    tile_size * 0.025,
+                    tile_size * 0.6,
+                ),
             )
             surfs[type(self), self.color] = self.surf
         else:
