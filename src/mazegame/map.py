@@ -286,6 +286,9 @@ class Door(Tile, HasColor):
     def get_color(self) -> Color:
         return self.color
 
+    def __str__(self) -> str:
+        return f"{self.color} {self.__class__.__name__} at {self.pos}"
+
 
 class DoorFrame(TouchableTile, HasColor):
     surfs: dict[Color, pygame.Surface] = {}
@@ -335,6 +338,9 @@ class DoorFrame(TouchableTile, HasColor):
 
     def get_color(self) -> Color:
         return self.color
+
+    def __str__(self) -> str:
+        return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
 class Key(TouchableTile, HasColor):
@@ -393,6 +399,9 @@ class Key(TouchableTile, HasColor):
 
     def get_color(self) -> Color:
         return self.color
+
+    def __str__(self) -> str:
+        return f"{self.color} {self.__class__.__name__} at {self.pos}"
 
 
 class Spike(TouchableTile):
