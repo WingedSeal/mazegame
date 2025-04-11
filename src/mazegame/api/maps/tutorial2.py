@@ -1,13 +1,8 @@
-from ...direction import Direction
 from ...color import Color
-from ...map import ColoredBlock, Door, Enemy, Exit, Key, Map, Block, Player, Spike
+from ...map import ColoredBlock, Door, Exit, Key, Map, Block, Player, Spike
 
-KEY1 = Key(Color.LIGHT_BLUE)
-KEY2 = Key(Color.GREEN)
-DOOR1 = Door(Color.LIGHT_BLUE)
-DOOR2 = Door(Color.GREEN)
 # fmt: off
-EXAMPLE2_1 = Map(
+TUTORIAL2_1 = Map(
     [
         [Block(), None,     Spike()],
         [Block(), None,     Spike()],
@@ -16,7 +11,7 @@ EXAMPLE2_1 = Map(
         [Block(), Player(), ColoredBlock(Color.PURPLE)]
     ]
 )
-EXAMPLE2_2 = Map(
+TUTORIAL2_2 = Map(
     [
         [Block(), None,     Spike()],
         [Block(), None,     Spike()],
@@ -25,27 +20,27 @@ EXAMPLE2_2 = Map(
         [Block(), Player(), Spike()]
     ]
 )
-EXAMPLE2_3 = Map(
+TUTORIAL2_3 = Map(
     [
         [Block(), None,     Spike()],
         [Block(), None,     Exit()],
         [Block(), None,     ColoredBlock(Color.PURPLE)],
         [Block(), None,     Spike()],
-        [Block(), Player(), ColoredBlock(Color.LIGHT_BLUE)]
+        [Block(), Player(), Spike()]
     ]
 )
-EXAMPLE2_4 = Map(
+TUTORIAL2_4 = Map(
     [
         [Block(), None,     Exit()],
         [Block(), None,     ColoredBlock(Color.PURPLE)],
-        [Block(), None,     ColoredBlock(Color.LIGHT_BLUE)],
+        [Block(), None,     Spike()],
         [Block(), None,     Spike()],
         [Block(), Player(), Spike()]
     ]
 )
 # fmt: on
 
-EXAMPLE2 = [EXAMPLE2_1, EXAMPLE2_2, EXAMPLE2_3, EXAMPLE2_4]
+TUTORIAL2 = [TUTORIAL2_1, TUTORIAL2_2, TUTORIAL2_3, TUTORIAL2_4]
 
 
 # def script():

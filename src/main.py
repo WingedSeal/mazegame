@@ -2,7 +2,7 @@ from mazegame import *
 
 
 def script():
-    return
+    pass
 
 
-run(script, EXAMPLE1)
+run(script, TUTORIAL5)

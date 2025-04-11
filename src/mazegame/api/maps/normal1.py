@@ -7,7 +7,7 @@ KEY2 = Key(Color.GREEN)
 DOOR1 = Door(Color.LIGHT_BLUE)
 DOOR2 = Door(Color.GREEN)
 # fmt: off
-EXAMPLE1 = Map(
+NORMAL1 = Map(
     [
         [Block(), Block(), Block(), Block(),  Block(), Block(), Block(), Block(),  Block()],
         [None,    Block(), Block(), Block(),  Block(), Block(), Block(), Block(),  Spike()],
