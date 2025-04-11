@@ -4,13 +4,13 @@ from pygame import Color as _Color
 
 
 class Color(Enum):
-    RED = _Color(255, 0, 0)
-    ORANGE = _Color(255, 165, 0)
-    YELLOW = _Color(255, 255, 0)
-    GREEN = _Color(0, 255, 0)
-    BLUE = _Color(0, 0, 255)
-    DEEP_BLUE = _Color(75, 0, 130)
-    PURPLE = _Color(238, 130, 238)
+    RED = _Color(255, 50, 50)
+    ORANGE = _Color(255, 140, 0)
+    YELLOW = _Color(255, 230, 50)
+    GREEN = _Color(0, 200, 0)
+    LIGHT_BLUE = _Color(100, 180, 255)
+    BLUE = _Color(0, 100, 255)
+    PURPLE = _Color(180, 100, 220)
 
     @classmethod
     def get_unique_colors(cls, count: int) -> list["Color"]:
@@ -38,9 +38,9 @@ class Color(Enum):
                 return "Yellow"
             case Color.GREEN:
                 return "Green"
+            case Color.LIGHT_BLUE:
+                return "Light Blue"
             case Color.BLUE:
                 return "Blue"
-            case Color.DEEP_BLUE:
-                return "Deep Blue"
             case Color.PURPLE:
                 return "Purple"

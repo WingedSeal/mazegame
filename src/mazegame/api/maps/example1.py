@@ -2,9 +2,9 @@ from ...direction import Direction
 from ...color import Color
 from ...map import Door, Enemy, Exit, Key, Map, Block, Player, Spike
 
-KEY1 = Key(Color.DEEP_BLUE)
+KEY1 = Key(Color.LIGHT_BLUE)
 KEY2 = Key(Color.GREEN)
-DOOR1 = Door(Color.DEEP_BLUE)
+DOOR1 = Door(Color.LIGHT_BLUE)
 DOOR2 = Door(Color.GREEN)
 # fmt: off
 EXAMPLE1 = Map(

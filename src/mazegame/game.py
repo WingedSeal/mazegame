@@ -66,7 +66,7 @@ class Game:
     MSPT = 500
     """Millisecond per tick"""
     TITLE = "Maze Game"
-    BG_COLOR = pygame.Color(10, 10, 10)
+    BG_COLOR = pygame.Color(40, 40, 40)
     game_event = threading.Event()
     next_moves: list[tuple[int, int, int, int]] = []
     """Moves set by Control (pos_x, pos_y, dx, dy)"""

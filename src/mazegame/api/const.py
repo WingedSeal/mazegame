@@ -16,8 +16,8 @@ RED = Color.RED
 ORANGE = Color.ORANGE
 YELLOW = Color.YELLOW
 GREEN = Color.GREEN
+LIGHT_BLUE = Color.LIGHT_BLUE
 BLUE = Color.BLUE
-DEEP_BLUE = Color.DEEP_BLUE
 PURPLE = Color.PURPLE
 
 LEFT = Direction.LEFT
@@ -43,7 +43,7 @@ __all__ = [
     "YELLOW",
     "GREEN",
     "BLUE",
-    "DEEP_BLUE",
+    "LIGHT_BLUE",
     "PURPLE",
     "LEFT",
     "RIGHT",

@@ -271,7 +271,7 @@ class DoorFrame(TouchableTile, HasColor):
         self.tile_size = tile_size
         self.pos = pos
         if (type(self), self.color) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill(
                 self.color.value,
                 (0, 0, tile_size * 0.1, tile_size),
@@ -317,7 +317,7 @@ class Key(TouchableTile, HasColor):
         self.tile_size = tile_size
         self.pos = pos
         if (type(self), self.color) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill(
                 self.color.value,
                 (tile_size * 0.45, tile_size * 0.45, tile_size * 0.1, tile_size * 0.1),
@@ -341,7 +341,7 @@ class Spike(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill((255, 0, 255))
             surfs[type(self)] = self.surf
         else:
@@ -376,7 +376,7 @@ class Exit(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill((0, 255, 0))
             surfs[type(self)] = self.surf
         else:
@@ -406,7 +406,7 @@ class Enemy(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
+            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             self.surf.fill((255, 0, 255))
             surfs[type(self)] = self.surf
         else:

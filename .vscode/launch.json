@@ -18,6 +18,13 @@
             "request": "launch",
             "program": "${cwd}/src/tests/test_all.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
         }
     ]
 }
