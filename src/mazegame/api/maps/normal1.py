@@ -1,6 +1,5 @@
-from ...direction import Direction
 from ...color import Color
-from ...map import Door, Enemy, Exit, Key, Map, Block, Player, Spike
+from ...map import Door, Exit, Key, Map, Block, Player, Spike
 
 KEY1 = Key(Color.LIGHT_BLUE)
 KEY2 = Key(Color.GREEN)

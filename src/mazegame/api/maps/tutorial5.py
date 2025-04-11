@@ -1,4 +1,3 @@
-from ...color import Color
 from ...map import Block, Exit, Map, Player, Spike
 
 
