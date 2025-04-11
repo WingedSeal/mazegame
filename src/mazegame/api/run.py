@@ -72,7 +72,7 @@ def run(script: Callable[[], None], map: Map | list[Map]) -> None:
 
 
 def _test_run(
-    script: Callable[[Game], None],
+    script: Callable[[], None],
     map: Map | list[Map],
     *,
     exit_on_tick: int | None = None,
@@ -92,7 +92,7 @@ def _test_run(
 
     def updated_script() -> None:
         get_game().control.pre_run()
-        script(game)
+        script()
         get_game().control.post_run()
 
     script_thread = threading.Thread(target=updated_script, daemon=True)

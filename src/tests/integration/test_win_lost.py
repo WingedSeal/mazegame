@@ -33,8 +33,8 @@ class TestWinLost(unittest.TestCase):
     def test_win(self) -> None:
         map = Map([[Player(), Exit()]])
 
-        def script(game: Game):
-            game.control.move(RIGHT)
+        def script():
+            move(RIGHT)
 
         game = _test_run(script, map, exit_on_tick=1)
         self.assertEqual(game.state, GameState.VICTORY)
@@ -42,8 +42,8 @@ class TestWinLost(unittest.TestCase):
     def test_run_into_enemy(self) -> None:
         map = Map([[Player(), Enemy(path=[])]])
 
-        def script(game: Game):
-            game.control.move(RIGHT)
+        def script():
+            move(RIGHT)
 
         game = _test_run(script, map, exit_on_tick=1)
         self.assertEqual(game.state, GameState.GAME_OVER)
@@ -51,8 +51,8 @@ class TestWinLost(unittest.TestCase):
     def test_run_into_spike(self) -> None:
         map = Map([[Player(), Spike()]])
 
-        def script(game: Game):
-            game.control.move(RIGHT)
+        def script():
+            move(RIGHT)
 
         game = _test_run(script, map, exit_on_tick=1)
         self.assertEqual(game.state, GameState.GAME_OVER)
@@ -60,7 +60,7 @@ class TestWinLost(unittest.TestCase):
     def test_enemy_run_into_player(self) -> None:
         map = Map([[Player(), Enemy(path=[Direction.LEFT])]])
 
-        def script(game: Game):
+        def script():
             return
 
         game = _test_run(script, map, exit_on_tick=1)

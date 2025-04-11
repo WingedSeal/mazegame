@@ -21,7 +21,7 @@ from mazegame.map import (
 from mazegame.api.run import _test_run
 
 
-def empty_script(game):
+def empty_script():
     pass
 
 
