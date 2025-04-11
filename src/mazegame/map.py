@@ -597,6 +597,13 @@ class Enemy(TouchableTile):
                 (tile_size // 2, tile_size // 2),
                 0.9 * tile_size // 2,
             )
+
+            self.surf.blit(
+                pygame.font.SysFont(
+                    "Times New Roman", tile_size // 5, bold=True
+                ).render(f"{self.chance_to_move:.0%}", True, _BLOCK_COLOR),
+                (tile_size * 0.1, tile_size * 0.1),
+            )
             surfs[type(self)] = self.surf
         else:
             self.surf = surfs[type(self)]

@@ -86,7 +86,7 @@ class Game:
         pygame.init()
         pygame.font.init()
         self.fonts = GameFont(
-            heading=pygame.font.SysFont("Times New Roman", 40),
+            heading=pygame.font.SysFont("Times New Roman", 40, bold=True),
             subheading=pygame.font.SysFont("Times New Roman", 20),
             tips=pygame.font.SysFont("Times New Roman", 10),
             # heading=pygame.font.Font(GameFont.PATH, 20),
