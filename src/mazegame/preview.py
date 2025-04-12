@@ -117,21 +117,26 @@ def enemy_to_path_points(
 
 
 class Preview:
+    MIN_DESC_HEIGHT = 128
+
     def __init__(self, map: Map) -> None:
+        pygame.init()
+        pygame.font.init()
+        self.display_surface = pygame.display.set_mode(
+            (Game.DEFAULT_WIDTH, Game.DEFAULT_HEIGHT)
+        )
+        self.max_index = 0
+        self.is_show_path = True
         self.map = map
         self.surfs: SurfsType = {}
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
-        pygame.init()
-        pygame.font.init()
         self.font = pygame.font.SysFont(
             "Times New Roman", self.tile_size // 5, bold=True
         )
         self.font_shadow = pygame.font.SysFont(
             "Times New Roman", self.tile_size // 4, bold=True
         )
-        self.display_surface = pygame.display.set_mode(
-            (self.screen_width, self.screen_height)
-        )
+        self.map_surface = pygame.Surface((self.screen_width, self.screen_height))
         self.surface_overlay = pygame.Surface(
             (self.screen_width, self.screen_height), pygame.SRCALPHA
         )
@@ -155,7 +160,7 @@ class Preview:
         :return: Tuple of tile_size, screen_width, screen_height
         """
         max_width = Game.DEFAULT_WIDTH // self.map.width
-        max_height = Game.DEFAULT_HEIGHT // self.map.height
+        max_height = (Game.DEFAULT_HEIGHT - self.MIN_DESC_HEIGHT) // self.map.height
         tile_size = min(max_width, max_height)
         screen_width = self.map.width * tile_size
         screen_height = self.map.height * tile_size
@@ -325,7 +330,7 @@ class Preview:
             (arrow_point[0] * self.tile_size, arrow_point[1] * self.tile_size)
             for arrow_point in arrow_points
         ]
-        self.display_surface.fill(
+        self.map_surface.fill(
             color,
             (
                 left * self.tile_size,
@@ -334,7 +339,7 @@ class Preview:
                 size_y * self.tile_size,
             ),
         )
-        pygame.draw.polygon(self.display_surface, color, arrow_points)
+        pygame.draw.polygon(self.map_surface, color, arrow_points)
         for font, text_color in (
             (self.font_shadow, _TEXT_SHADOW_COLOR),
             (self.font, _TEXT_COLOR),
@@ -347,8 +352,19 @@ class Preview:
                 ),
             )
 
-    def run(self) -> None:
-        self.display_surface.fill(Game.BG_COLOR)
+    def run(self):
+        while True:
+            self.update_map()
+            self.display_surface.blit(self.map_surface, (0, 0))
+            pygame.display.update()
+            while True:
+                for event in pygame.event.get():
+                    if event.type == locals.QUIT:
+                        self.teardown()
+                        return
+
+    def update_map(self) -> None:
+        self.map_surface.fill(Game.BG_COLOR)
         for row in self.map.map:
             for tile in row:
                 if tile is None:
@@ -356,10 +372,10 @@ class Preview:
                 assert hasattr(tile, "surf")
                 assert hasattr(tile, "rect")
                 if tile.tile_under is not None:
-                    self.display_surface.blit(
-                        tile.tile_under.surf, tile.tile_under.rect
-                    )
-                self.display_surface.blit(tile.surf, tile.rect)
+                    self.map_surface.blit(tile.tile_under.surf, tile.tile_under.rect)
+                self.map_surface.blit(tile.surf, tile.rect)
+        if not self.is_show_path:
+            return
         enemies = self.map.get_tiles(Enemy)
         self.surface_overlay.fill((0, 0, 0, 0))
         for enemy in enemies:
@@ -383,10 +399,4 @@ class Preview:
                     self.tile_size * (enemy.pos[1] + 0.3),
                 ),
             )
-        self.display_surface.blit(self.surface_overlay, self.surface_overlay.get_rect())
-        pygame.display.update()
-        while True:
-            for event in pygame.event.get():
-                if event.type == locals.QUIT:
-                    self.teardown()
-                    return
+        self.map_surface.blit(self.surface_overlay, self.surface_overlay.get_rect())
