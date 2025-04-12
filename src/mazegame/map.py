@@ -55,15 +55,6 @@ class Tile(ABC, pygame.sprite.Sprite):
     ) -> None:
         pass
 
-    def preview_init(
-        self,
-        pos: tuple[int, int],
-        tile_size: int,
-        surfs: SurfsType,
-    ) -> None:
-        """Used for preview only"""
-        self.init(pos, tile_size, surfs)
-
     def _pos_to_pixel(
         self, pos: tuple[int, int], padding: tuple[int, int] = (0, 0)
     ) -> tuple[int, int]:
@@ -610,28 +601,6 @@ class Enemy(TouchableTile):
             surfs[type(self)] = self.surf
         else:
             self.surf = surfs[type(self)]
-        self.rect = self.surf.get_rect()
-
-    def preview_init(
-        self, pos: tuple[int, int], tile_size: int, surfs: SurfsType
-    ) -> None:
-        self.tile_size = tile_size
-        self.pos = pos
-        self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-        pygame.draw.circle(
-            self.surf,
-            _ENEMY_COLOR,
-            (tile_size // 2, tile_size // 2),
-            0.9 * tile_size // 2,
-        )
-
-        self.surf.blit(
-            pygame.font.SysFont("Times New Roman", tile_size // 5, bold=True).render(
-                f"{self.chance_to_move:.0%}", True, _BLOCK_COLOR
-            ),
-            (tile_size * 0.1, tile_size * 0.1),
-        )
-
         self.rect = self.surf.get_rect()
 
     def interacted_with(self, other_tile: Tile, game: "Game") -> None:

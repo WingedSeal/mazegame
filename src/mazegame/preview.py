@@ -7,7 +7,7 @@ from .color import Color
 
 from .direction import Direction
 from .game import Game
-from .map import Enemy, Map, SurfsType
+from .map import _BLOCK_COLOR, Enemy, Map, SurfsType
 
 
 _ARROW_PADDING = 0.3
@@ -117,9 +117,9 @@ class Preview:
             for x, tile in enumerate(row):
                 if tile is None:
                     continue
-                tile.preview_init((x, y), self.tile_size, self.surfs)
+                tile.init((x, y), self.tile_size, self.surfs)
                 if tile.tile_under is not None:
-                    tile.tile_under.preview_init((x, y), self.tile_size, self.surfs)
+                    tile.tile_under.init((x, y), self.tile_size, self.surfs)
                     tile.tile_under.rect.topleft = tile.tile_under.get_top_left((x, y))
                 tile.rect.topleft = tile.get_top_left((x, y))
                 if tile._auto_remove:
@@ -239,6 +239,17 @@ class Preview:
                     self.draw_arrow(
                         path_point[0:2], path_point[2:4], path_point[4], color
                     )
+            surf = pygame.Surface((enemy.tile_size, enemy.tile_size), pygame.SRCALPHA)
+            surf.blit(
+                pygame.font.SysFont(
+                    "Times New Roman", self.tile_size // 5, bold=True
+                ).render(f"{enemy.chance_to_move:.0%}", True, _BLOCK_COLOR),
+                (self.tile_size * 0.1, self.tile_size * 0.1),
+            )
+
+            self.display_surface.blit(
+                surf, surf.get_rect(topleft=enemy.get_top_left(enemy.pos))
+            )
 
         pygame.display.update()
         while True:
