@@ -1,7 +1,6 @@
 from math import floor
 from typing import cast
 import pygame
-from pygame import locals
 
 from .color import Color
 
@@ -382,10 +381,27 @@ class Preview:
                 )
             pygame.display.update()
             while True:
+                is_re_render = False
                 for event in pygame.event.get():
-                    if event.type == locals.QUIT:
+                    if event.type == pygame.QUIT:
                         self.teardown()
                         return
+                    elif event.type == pygame.KEYDOWN:
+                        match event.key:
+                            case pygame.K_RIGHT:
+                                self.map_index = (self.map_index + 1) % len(self.maps)
+                                is_re_render = True
+                                break
+                            case pygame.K_LEFT:
+                                self.map_index = (self.map_index - 1) % len(self.maps)
+                                is_re_render = True
+                                break
+                            case pygame.K_SPACE:
+                                self.is_show_path = not self.is_show_path
+                                is_re_render = True
+                                break
+                if is_re_render:
+                    break
 
     def update_map(self) -> None:
         self.map_surface.fill(Game.BG_COLOR)

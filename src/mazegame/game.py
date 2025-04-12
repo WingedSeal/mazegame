@@ -6,7 +6,6 @@ import sys
 import threading
 from typing import Any
 import pygame
-from pygame import locals
 import numpy as np
 from scipy.ndimage import gaussian_filter
 
@@ -308,7 +307,7 @@ class Game:
         """
 
         for event in pygame.event.get():
-            if event.type == locals.QUIT:
+            if event.type == pygame.QUIT:
                 self.teardown()
                 return True
 

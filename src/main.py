@@ -15,7 +15,14 @@ Preview(
                 [Block(), None, None],
                 [Block(), None, Enemy(path=[UP, LEFT, UP, RIGHT, DOWN])],
             ]
-        )
+        ),
+        Map(
+            [
+                [Block(), None, Block()],
+                [Block(), None, None],
+                [Block(), None, Enemy(path=[UP, LEFT, UP, RIGHT, DOWN])],
+            ]
+        ),
     ]
 ).run()
 
