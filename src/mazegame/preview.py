@@ -11,7 +11,7 @@ from .map import _BLOCK_COLOR, Enemy, Map, SurfsType
 
 
 _ARROW_PADDING = 0.3
-_ARROW_WIDTH = 0.1
+_ARROW_WIDTH = 0.05
 _ARROW_HEAD_HEIGHT = 0.1
 _ARROW_HEAD_WIDTH_OFFSET = 0.05
 
