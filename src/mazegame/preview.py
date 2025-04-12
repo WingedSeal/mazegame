@@ -28,6 +28,7 @@ def enemy_to_path_points(
     :param enemy: Enenmy
     :return: List of either (tuple of start_pos.x, start_pos.y, end_pos.x, end_pos.y, direction) for move or (tuple of pos.x, pos.y, times) for halt
     """
+    print(enemy.path)
     path = enemy.path
     starting_point = enemy.pos
     last_move = None
@@ -41,7 +42,8 @@ def enemy_to_path_points(
             last_move = move
         else:
             last_move_count += 1
-    print(condensed_path)
+    if last_move is not None:
+        condensed_path.append((last_move, last_move_count))
     path_points: list[
         tuple[float, float, float, float, Direction] | tuple[int, int, int]
     ] = []
