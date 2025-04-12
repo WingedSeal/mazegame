@@ -13,6 +13,7 @@ from .map import _BLOCK_COLOR, Enemy, Map, SurfsType
 _ARROW_PADDING = 0.3
 _ARROW_WIDTH = 0.05
 _ARROW_HEAD_HEIGHT = 0.1
+_ARROW_HEAD_PADDING = 0.1
 _ARROW_HEAD_WIDTH_OFFSET = 0.05
 
 
@@ -156,19 +157,27 @@ class Preview:
         match direction:
             case Direction.UP | Direction.DOWN:
                 size_x = _ARROW_WIDTH
-                size_y = abs(end_pos[1] - start_pos[1]) - _ARROW_HEAD_HEIGHT
+                size_y = (
+                    abs(end_pos[1] - start_pos[1])
+                    - _ARROW_HEAD_HEIGHT
+                    - _ARROW_HEAD_PADDING
+                )
                 left -= _ARROW_WIDTH / 2
             case Direction.LEFT | Direction.RIGHT:
-                size_x = abs(end_pos[0] - start_pos[0]) - _ARROW_HEAD_HEIGHT
+                size_x = (
+                    abs(end_pos[0] - start_pos[0])
+                    - _ARROW_HEAD_HEIGHT
+                    - _ARROW_HEAD_PADDING
+                )
                 size_y = _ARROW_WIDTH
                 top -= _ARROW_WIDTH / 2
             case Direction.HALT:
                 raise ValueError("Cannot draw arrow for halt")
         match direction:
             case Direction.UP:
-                top += _ARROW_HEAD_HEIGHT
+                top += _ARROW_HEAD_HEIGHT + _ARROW_HEAD_PADDING
             case Direction.LEFT:
-                left += _ARROW_HEAD_HEIGHT
+                left += _ARROW_HEAD_HEIGHT + _ARROW_HEAD_PADDING
         arrow_points: list[tuple[float, float]]
         match direction:
             case Direction.UP:
