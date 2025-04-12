@@ -629,6 +629,24 @@ class Enemy(TouchableTile):
             ),
         )
 
+    def __str__(self) -> str:
+        path = [
+            {
+                Direction.UP: "^",
+                Direction.DOWN: "V",
+                Direction.LEFT: "<",
+                Direction.RIGHT: ">",
+                Direction.HALT: "o",
+            }[direction]
+            for direction in self.path
+        ]
+        if not self.path:
+            path = ["[]"]
+        else:
+            path.insert(self.index + 1, "]")
+            path.insert(self.index, "[")
+        return f"{self.__class__.__name__} at {self.pos} with {self.chance_to_move:.0%} chance to move (pathing: {"".join(path)})"
+
 
 TileVar = TypeVar("TileVar", bound=Tile)
 
