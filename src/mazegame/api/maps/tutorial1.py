@@ -12,7 +12,7 @@ TUTORIAL1_1 = Map(
 )
 # fmt: on
 
-TUTORIAL1 = ([TUTORIAL1_1], "TUTORIAL1")
+TUTORIAL1 = ([TUTORIAL1_1], "Use 'move(UP)' to reach the exit!")
 
 # def script():
 #     for _ in range(4):

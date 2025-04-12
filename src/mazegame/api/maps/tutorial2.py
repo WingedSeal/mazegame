@@ -40,7 +40,11 @@ TUTORIAL2_4 = Map(
 )
 # fmt: on
 
-TUTORIAL2 = ([TUTORIAL2_1, TUTORIAL2_2, TUTORIAL2_3, TUTORIAL2_4], "TUTORIAL2")
+TUTORIAL2 = (
+    [TUTORIAL2_1, TUTORIAL2_2, TUTORIAL2_3, TUTORIAL2_4],
+    """The exit will always be above purple block!
+Technically, you can check for spike. But please don't do that~)""",
+)
 
 
 # def script():

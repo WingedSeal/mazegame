@@ -372,11 +372,7 @@ class Preview:
             True,
             _TEXT_COLOR,
         )
-        text_desc = self.desc_font.render(
-            self.map_desc,
-            True,
-            _TEXT_COLOR,
-        )
+
         self.desc_surface.blit(
             text_index,
             text_index.get_rect(
@@ -391,13 +387,19 @@ class Preview:
                 centerx=desc_rect.centerx,
             ),
         )
-        self.desc_surface.blit(
-            text_desc,
-            text_desc.get_rect(
-                top=desc_rect.top + 50,
-                centerx=desc_rect.centerx,
-            ),
-        )
+        for offset, map_desc in enumerate(self.map_desc.split("\n")):
+            text_desc = self.desc_font.render(
+                map_desc,
+                True,
+                _TEXT_COLOR,
+            )
+            self.desc_surface.blit(
+                text_desc,
+                text_desc.get_rect(
+                    top=desc_rect.top + 50 + offset * 25,
+                    centerx=desc_rect.centerx,
+                ),
+            )
         self.display_surface.blit(
             self.desc_surface,
             (
