@@ -58,6 +58,12 @@ def get_color(
 
 
 def run(script: Callable[[], None], map: tuple[list[Map], str]) -> None:
+    """
+    Run the game using given script
+
+    :param script: script that specify players' movements
+    :param map: Map
+    """
     _map = random.choice(map[0])
     game_obj.game = Game(_map)
 
@@ -72,6 +78,11 @@ def run(script: Callable[[], None], map: tuple[list[Map], str]) -> None:
 
 
 def preview(map: tuple[list[Map], str]) -> None:
+    """
+    Preview the map with its description, enemy pathing, etc.
+
+    :param map: Map
+    """
     Preview(*map).run()
 
 
