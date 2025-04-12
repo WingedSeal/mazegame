@@ -6,7 +6,7 @@ KEY2 = Key(Color.GREEN)
 DOOR1 = Door(Color.LIGHT_BLUE)
 DOOR2 = Door(Color.GREEN)
 # fmt: off
-NORMAL1 = Map(
+NORMAL1_1 = Map(
     [
         [Block(), Block(), Block(), Block(),  Block(), Block(), Block(), Block(),  Block()],
         [None,    Block(), Block(), Block(),  Block(), Block(), Block(), Block(),  Spike()],
@@ -17,7 +17,7 @@ NORMAL1 = Map(
     ]
 )
 # fmt: on
-
+NORMAL1 = ([NORMAL1_1], "NORMAL1")
 # def script():
 #     move(RIGHT)
 #     move(DOWN)

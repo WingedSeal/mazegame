@@ -12,7 +12,7 @@ ENEMY2 = Enemy(
     [Direction.HALT] * 12 + [Direction.DOWN] + [Direction.HALT] * 12 + [Direction.UP]
 )
 # fmt: off
-NORMAL4 = Map(
+NORMAL4_1 = Map(
     [
         [Block(), None,     Block(), None],
         [Block(), DOOR2,    Block(), None],
@@ -26,6 +26,8 @@ NORMAL4 = Map(
     ]
 )
 # fmt: on
+
+NORMAL4 = ([NORMAL4_1], "NORMAL4")
 
 # def script():
 #     for _ in range(5):

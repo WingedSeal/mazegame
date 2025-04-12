@@ -1,7 +1,7 @@
 from ...direction import Direction
 from ...map import Block, Enemy, Exit, Map, Player
 
-TUTORIAL3 = Map(
+TUTORIAL3_1 = Map(
     [
         [Block(), Block(), Exit(), Block()],
         [
@@ -13,6 +13,8 @@ TUTORIAL3 = Map(
         [Block(), Block(), Player(), Block()],
     ]
 )
+
+TUTORIAL3 = ([TUTORIAL3_1], "TUTORIAL3")
 
 # def script():
 #     while get_tile(UP) == ENEMY:

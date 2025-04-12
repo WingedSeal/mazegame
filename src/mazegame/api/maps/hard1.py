@@ -7,7 +7,7 @@ ENEMY = Enemy(
     chance_to_move=0.5,
 )
 
-HARD1 = Map(
+HARD1_1 = Map(
     [
         [Block(), None, Exit(), Block()],
         [Block(), None, Block(), Block()],
@@ -23,6 +23,8 @@ HARD1 = Map(
         [Block(), Player(), Block(), Block()],
     ]
 )
+
+HARD1 = ([HARD1_1], "HARD1")
 
 # def script():
 #     while get_tile(UP) == ENEMY:

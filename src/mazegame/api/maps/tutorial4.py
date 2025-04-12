@@ -4,7 +4,7 @@ from ...map import Block, Door, Enemy, Exit, Key, Map, Player
 
 color = Color.get_unique_colors(1)[0]
 
-TUTORIAL4 = Map(
+TUTORIAL4_1 = Map(
     [
         [Block(), Exit(), Block()],
         [Block(), Door(color), Block()],
@@ -12,6 +12,8 @@ TUTORIAL4 = Map(
         [Block(), Key(color), Block()],
     ]
 )
+
+TUTORIAL4 = ([TUTORIAL4_1], "TUTORIAL4")
 
 # def script():
 #     move(DOWN)

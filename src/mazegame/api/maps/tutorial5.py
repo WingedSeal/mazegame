@@ -1,7 +1,7 @@
 from ...map import Block, Exit, Map, Player, Spike
 
 
-TUTORIAL5 = Map(
+TUTORIAL5_1 = Map(
     [
         [Block(), Exit(), Block(), Block(), None],
         [Block(), None, Block(), Spike(), None],
@@ -9,6 +9,7 @@ TUTORIAL5 = Map(
     ]
 )
 
+TUTORIAL5 = ([TUTORIAL5_1], "TUTORIAL5")
 
 # def script():
 #     move(RIGHT)

@@ -120,8 +120,9 @@ class Preview:
     BG_COLOR = pygame.Color(0, 0, 0)
     DESC_BG_COLOR = pygame.Color(20, 20, 20)
 
-    def __init__(self, maps: list[Map]) -> None:
+    def __init__(self, maps: list[Map], map_desc: str) -> None:
         self.maps = maps
+        self.map_desc = map_desc
         pygame.init()
         pygame.font.init()
         self.display_surface = pygame.display.set_mode(
@@ -138,6 +139,9 @@ class Preview:
         self.font = pygame.font.SysFont(
             "Times New Roman", self.tile_size // 5, bold=True
         )
+        self.desc_font_index = pygame.font.SysFont("Times New Roman", 30, bold=True)
+        self.desc_font_key = pygame.font.SysFont("Times New Roman", 10, bold=True)
+        self.desc_font = pygame.font.SysFont("Times New Roman", 20, bold=True)
         self.font_shadow = pygame.font.SysFont(
             "Times New Roman", self.tile_size // 4, bold=True
         )
@@ -359,7 +363,41 @@ class Preview:
 
     def update_desc(self) -> None:
         self.desc_surface.fill(self.DESC_BG_COLOR)
-
+        desc_rect = self.desc_surface.get_rect()
+        text_index = self.desc_font_index.render(
+            f"< {self.map_index + 1}/{len(self.maps)} >", True, _TEXT_COLOR
+        )
+        text_key = self.desc_font_key.render(
+            f"Press <space> to {'hide' if self.is_show_path else 'show' } paths. Press < for previous map, > for next map.",
+            True,
+            _TEXT_COLOR,
+        )
+        text_desc = self.desc_font.render(
+            self.map_desc,
+            True,
+            _TEXT_COLOR,
+        )
+        self.desc_surface.blit(
+            text_index,
+            text_index.get_rect(
+                top=desc_rect.top,
+                centerx=desc_rect.centerx,
+            ),
+        )
+        self.desc_surface.blit(
+            text_key,
+            text_key.get_rect(
+                top=desc_rect.top + 35,
+                centerx=desc_rect.centerx,
+            ),
+        )
+        self.desc_surface.blit(
+            text_desc,
+            text_desc.get_rect(
+                top=desc_rect.top + 50,
+                centerx=desc_rect.centerx,
+            ),
+        )
         self.display_surface.blit(
             self.desc_surface,
             (

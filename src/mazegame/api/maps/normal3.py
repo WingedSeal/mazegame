@@ -43,7 +43,7 @@ NORMAL3_2 = Map(
     ]
 )
 
-NORMAL3 = [NORMAL3_1, NORMAL3_2]
+NORMAL3 = ([NORMAL3_1, NORMAL3_2], "NORMAL3")
 
 # def script():
 #     move(UP)

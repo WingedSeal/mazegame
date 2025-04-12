@@ -3,6 +3,7 @@ import random
 import threading
 from typing import Callable
 
+from ..preview import Preview
 from ..color import Color
 from ..direction import Direction
 from ..game import Game
@@ -56,10 +57,9 @@ def get_color(
     return tile.get_color()
 
 
-def run(script: Callable[[], None], map: Map | list[Map]) -> None:
-    if isinstance(map, list):
-        map = random.choice(map)
-    game_obj.game = Game(map)
+def run(script: Callable[[], None], map: tuple[list[Map], str]) -> None:
+    _map = random.choice(map[0])
+    game_obj.game = Game(_map)
 
     def updated_script() -> None:
         get_game().control.pre_run()
@@ -71,9 +71,13 @@ def run(script: Callable[[], None], map: Map | list[Map]) -> None:
     get_game().run()
 
 
+def preview(map: tuple[list[Map], str]) -> None:
+    Preview(*map).run()
+
+
 def _test_run(
     script: Callable[[], None],
-    map: Map | list[Map],
+    map: list[Map] | Map,
     *,
     exit_on_tick: int | None = None,
     mspt: int | None = 1,
@@ -81,7 +85,6 @@ def _test_run(
 ) -> Game:
     if not is_render:
         os.environ["SDL_VIDEODRIVER"] = "dummy"
-
     if isinstance(map, list):
         map = random.choice(map)
     game = Game(map)
