@@ -10,13 +10,26 @@ from .game import Game
 from .map import Enemy, Map, SurfsType
 
 
-_ARROW_PADDING = 0.2
+_ARROW_PADDING = 0.3
 _ARROW_WIDTH = 0.1
+_ARROW_HEAD_HEIGHT = 0.1
+_ARROW_HEAD_WIDTH_OFFSET = 0.05
 
 
 class ColorGenerator:
+    _colors: list[Color]
+
+    def reset_color(self):
+        self._colors = Color.get_unique_colors(None)
+
+    def __init__(self) -> None:
+        self.reset_color()
+
     def get_color(self) -> pygame.Color:
-        return Color.RED.value
+        color = self._colors.pop()
+        if not self._colors:
+            self.reset_color()
+        return color.value
 
 
 def enemy_to_path_points(
@@ -28,7 +41,6 @@ def enemy_to_path_points(
     :param enemy: Enenmy
     :return: List of either (tuple of start_pos.x, start_pos.y, end_pos.x, end_pos.y, direction) for move or (tuple of pos.x, pos.y, times) for halt
     """
-    print(enemy.path)
     path = enemy.path
     starting_point = enemy.pos
     last_move = None
@@ -129,7 +141,7 @@ class Preview:
     def teardown(self) -> None:
         pygame.quit()
 
-    def draw_halt(self, pos: tuple[int, int], times: int) -> None:
+    def draw_halt(self, pos: tuple[int, int], times: int, color: pygame.Color) -> None:
         pass
 
     def draw_arrow(
@@ -137,23 +149,57 @@ class Preview:
         start_pos: tuple[float, float],
         end_pos: tuple[float, float],
         direction: Direction,
+        color: pygame.Color,
     ) -> None:
-        print(start_pos, end_pos, direction)
-        color = self.color_generator.get_color()
         left = min(start_pos[0], end_pos[0])
         top = min(start_pos[1], end_pos[1])
         match direction:
             case Direction.UP | Direction.DOWN:
                 size_x = _ARROW_WIDTH
-                size_y = abs(end_pos[1] - start_pos[1])
+                size_y = abs(end_pos[1] - start_pos[1]) - _ARROW_HEAD_HEIGHT
                 left -= _ARROW_WIDTH / 2
             case Direction.LEFT | Direction.RIGHT:
-                size_x = abs(end_pos[0] - start_pos[0])
+                size_x = abs(end_pos[0] - start_pos[0]) - _ARROW_HEAD_HEIGHT
                 size_y = _ARROW_WIDTH
                 top -= _ARROW_WIDTH / 2
             case Direction.HALT:
                 raise ValueError("Cannot draw arrow for halt")
+        match direction:
+            case Direction.UP:
+                top += _ARROW_HEAD_HEIGHT
+            case Direction.LEFT:
+                left += _ARROW_HEAD_HEIGHT
+        arrow_points: list[tuple[float, float]]
+        match direction:
+            case Direction.UP:
+                arrow_points = [
+                    (left - _ARROW_HEAD_WIDTH_OFFSET, top),
+                    (left + size_x / 2, top - _ARROW_HEAD_HEIGHT),
+                    (left + size_x + _ARROW_HEAD_WIDTH_OFFSET, top),
+                ]
+            case Direction.DOWN:
+                arrow_points = [
+                    (left - _ARROW_HEAD_WIDTH_OFFSET, top + size_y),
+                    (left + size_x / 2, top + size_y + _ARROW_HEAD_HEIGHT),
+                    (left + size_x + _ARROW_HEAD_WIDTH_OFFSET, top + size_y),
+                ]
+            case Direction.LEFT:
+                arrow_points = [
+                    (left, top + size_y + _ARROW_HEAD_WIDTH_OFFSET),
+                    (left - _ARROW_HEAD_HEIGHT, top + size_y / 2),
+                    (left, top - _ARROW_HEAD_WIDTH_OFFSET),
+                ]
+            case Direction.RIGHT:
+                arrow_points = [
+                    (left + size_x, top + size_y + _ARROW_HEAD_WIDTH_OFFSET),
+                    (left + size_x - _ARROW_HEAD_HEIGHT, top + size_y / 2),
+                    (left + size_x, top - _ARROW_HEAD_WIDTH_OFFSET),
+                ]
 
+        arrow_points = [
+            (arrow_point[0] * self.tile_size, arrow_point[1] * self.tile_size)
+            for arrow_point in arrow_points
+        ]
         self.display_surface.fill(
             color,
             (
@@ -163,6 +209,7 @@ class Preview:
                 size_y * self.tile_size,
             ),
         )
+        pygame.draw.polygon(self.display_surface, color, arrow_points)
 
     def run(self) -> None:
         self.display_surface.fill(Game.BG_COLOR)
@@ -178,17 +225,20 @@ class Preview:
                     )
                 self.display_surface.blit(tile.surf, tile.rect)
         enemies = self.map.get_tiles(Enemy)
-        for i, enemy in enumerate(enemies):
+        for enemy in enemies:
+            color = self.color_generator.get_color()
             path_points = enemy_to_path_points(enemy)
             for path_point in path_points:
                 if isinstance(path_point[0], int):
                     path_point = cast(tuple[int, int, int], path_point)
-                    self.draw_halt(path_point[0:2], path_point[2])
+                    self.draw_halt(path_point[0:2], path_point[2], color)
                 else:
                     path_point = cast(
                         tuple[float, float, float, float, Direction], path_point
                     )
-                    self.draw_arrow(path_point[0:2], path_point[2:4], path_point[4])
+                    self.draw_arrow(
+                        path_point[0:2], path_point[2:4], path_point[4], color
+                    )
 
         pygame.display.update()
         while True:
