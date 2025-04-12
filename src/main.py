@@ -7,4 +7,4 @@ def script():
     pass
 
 
-preview(TUTORIAL5)
+preview(HARD1)

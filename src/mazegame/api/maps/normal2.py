@@ -14,7 +14,7 @@ maps = [
 for i, (x, y) in enumerate(((0, 1), (1, 0), (1, 2), (2, 1))):
     maps[i][y][x] = Exit()
 
-NORMAL2 = ([Map(map) for map in maps], "NORMAL2")
+NORMAL2 = ([Map(map) for map in maps], "The spike can spawn on any tile next to you.")
 
 # def script():
 #     if get_tile(UP) == EXIT:

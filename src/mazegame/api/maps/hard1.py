@@ -24,7 +24,7 @@ HARD1_1 = Map(
     ]
 )
 
-HARD1 = ([HARD1_1], "HARD1")
+HARD1 = ([HARD1_1], "Don't forget that the enemy has a chance to not move.")
 
 # def script():
 #     while get_tile(UP) == ENEMY:

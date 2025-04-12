@@ -17,7 +17,7 @@ NORMAL1_1 = Map(
     ]
 )
 # fmt: on
-NORMAL1 = ([NORMAL1_1], "NORMAL1")
+NORMAL1 = ([NORMAL1_1], "Beware of the spike!")
 # def script():
 #     move(RIGHT)
 #     move(DOWN)

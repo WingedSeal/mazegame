@@ -27,7 +27,10 @@ NORMAL4_1 = Map(
 )
 # fmt: on
 
-NORMAL4 = ([NORMAL4_1], "NORMAL4")
+NORMAL4 = (
+    [NORMAL4_1],
+    """Enemy to your right will not move away in time, use that Lock wisely!""",
+)
 
 # def script():
 #     for _ in range(5):

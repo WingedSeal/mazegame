@@ -43,7 +43,11 @@ NORMAL3_2 = Map(
     ]
 )
 
-NORMAL3 = ([NORMAL3_1, NORMAL3_2], "NORMAL3")
+NORMAL3 = (
+    [NORMAL3_1, NORMAL3_2],
+    """If 2 colored floors have the same color, the exit will be on the left.
+If 2 colored floors have different colors, the exit will be on the right.""",
+)
 
 # def script():
 #     move(UP)
