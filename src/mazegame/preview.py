@@ -119,15 +119,18 @@ def enemy_to_path_points(
 class Preview:
     MIN_DESC_HEIGHT = 128
 
-    def __init__(self, map: Map) -> None:
+    def __init__(self, maps: list[Map]) -> None:
+        self.maps = maps
         pygame.init()
         pygame.font.init()
         self.display_surface = pygame.display.set_mode(
             (Game.DEFAULT_WIDTH, Game.DEFAULT_HEIGHT)
         )
-        self.max_index = 0
+        self.map_index = 0
         self.is_show_path = True
-        self.map = map
+
+    def init_map(self) -> None:
+        self.map = self.maps[self.map_index]
         self.surfs: SurfsType = {}
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         self.font = pygame.font.SysFont(
@@ -354,6 +357,7 @@ class Preview:
 
     def run(self):
         while True:
+            self.init_map()
             self.update_map()
             if (self.map.width * self.tile_size) == Game.DEFAULT_WIDTH:
                 self.display_surface.blit(

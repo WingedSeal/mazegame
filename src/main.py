@@ -8,13 +8,15 @@ def script():
 
 
 Preview(
-    Map(
-        [
-            [Block(), Block(), Block()],
-            [Block(), None, None],
-            [Block(), None, Enemy(path=[UP, LEFT, UP, RIGHT, DOWN])],
-        ]
-    )
+    [
+        Map(
+            [
+                [Block(), Block(), Block()],
+                [Block(), None, None],
+                [Block(), None, Enemy(path=[UP, LEFT, UP, RIGHT, DOWN])],
+            ]
+        )
+    ]
 ).run()
 
 # run(script, NORMAL4)
