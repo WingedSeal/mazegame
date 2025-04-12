@@ -1,17 +1,11 @@
+from mazegame.preview import Preview
 from mazegame import *
 
 
 def script():
-    for _ in range(5):
-        wait()
-    for _ in range(5):
-        move(UP)
-    for _ in range(5):
-        move(DOWN)
-    move(RIGHT)
-    move(RIGHT)
-    for _ in range(3):
-        move(UP)
+    return
 
 
-run(script, NORMAL4)
+Preview(NORMAL4).run()
+
+# run(script, NORMAL4)
