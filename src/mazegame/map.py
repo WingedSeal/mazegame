@@ -427,6 +427,13 @@ class Lock(TouchableTile, HasColor):
             for x, tile in enumerate(row):
                 if isinstance(tile, DoorFrame) and tile.color == self.color:
                     game.map.map[y][x] = tile.door
+                elif (
+                    tile is not None
+                    and isinstance(tile.tile_under, DoorFrame)
+                    and tile.tile_under.color == self.color
+                ):
+                    # Put closed door under a tile that's currently occupying the doorframe when the lock happens.
+                    tile.tile_under = tile.tile_under.door
 
     def init(
         self,
