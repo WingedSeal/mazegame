@@ -15,6 +15,13 @@ _ARROW_WIDTH = 0.05
 _ARROW_HEAD_HEIGHT = 0.1
 _ARROW_HEAD_PADDING = 0.1
 _ARROW_HEAD_WIDTH_OFFSET = 0.05
+_CIRCLE_ARROW_HEAD_WIDTH_OFFSET = 0.1
+_CIRCLE_OUTER_RADIUS = 0.175
+_CIRCLE_INNER_RADIUS = 0.15
+_CIRCLE_PADDING_LEFT = 0.2
+_CIRCLE_PADDING_TOP = 0.1
+_TIMES_PADDING_LEFT = 0.1
+_TIMES_PADDING_TOP = 0.0
 
 
 class ColorGenerator:
@@ -28,8 +35,11 @@ class ColorGenerator:
 
     def get_color(self) -> pygame.Color:
         color = self._colors.pop()
+
         if not self._colors:
             self.reset_color()
+        if color == Color.RED:
+            return self.get_color()
         return color.value
 
 
@@ -110,8 +120,12 @@ class Preview:
         self.surfs: SurfsType = {}
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         pygame.init()
+        pygame.font.init()
         self.display_surface = pygame.display.set_mode(
             (self.screen_width, self.screen_height)
+        )
+        self.surface_overlay = pygame.Surface(
+            (self.screen_width, self.screen_height), pygame.SRCALPHA
         )
         self.color_generator = ColorGenerator()
         for y, row in enumerate(self.map.map):
@@ -142,8 +156,86 @@ class Preview:
     def teardown(self) -> None:
         pygame.quit()
 
-    def draw_halt(self, pos: tuple[int, int], times: int, color: pygame.Color) -> None:
-        pass
+    def draw_halt(
+        self, pos: tuple[int, int], times: int, color: pygame.Color, index: int
+    ) -> None:
+        self.surface_overlay.blit(
+            pygame.font.SysFont(
+                "Times New Roman", self.tile_size // 5, bold=True
+            ).render(f"x{times}", True, color),
+            (
+                self.tile_size
+                * (
+                    pos[0]
+                    + _CIRCLE_PADDING_LEFT
+                    + _CIRCLE_OUTER_RADIUS * 2
+                    + _TIMES_PADDING_LEFT
+                ),
+                self.tile_size * (pos[1] + _TIMES_PADDING_TOP),
+            ),
+        )
+        pygame.draw.circle(
+            self.surface_overlay,
+            color,
+            (
+                (pos[0] + _CIRCLE_PADDING_LEFT + _CIRCLE_OUTER_RADIUS) * self.tile_size,
+                (pos[1] + _CIRCLE_PADDING_TOP) * self.tile_size,
+            ),
+            _CIRCLE_OUTER_RADIUS * self.tile_size,
+        )
+        pygame.draw.circle(
+            self.surface_overlay,
+            (0, 0, 0, 0),
+            (
+                (pos[0] + _CIRCLE_PADDING_LEFT + _CIRCLE_OUTER_RADIUS) * self.tile_size,
+                (pos[1] + _CIRCLE_PADDING_TOP) * self.tile_size,
+            ),
+            _CIRCLE_INNER_RADIUS * self.tile_size,
+        )
+        pygame.draw.polygon(
+            self.surface_overlay,
+            color,
+            [
+                (
+                    (
+                        pos[0]
+                        + _CIRCLE_PADDING_LEFT
+                        + _CIRCLE_OUTER_RADIUS
+                        + _ARROW_HEAD_HEIGHT
+                    )
+                    * self.tile_size,
+                    (
+                        pos[1]
+                        + _CIRCLE_PADDING_TOP
+                        + _CIRCLE_INNER_RADIUS
+                        - _CIRCLE_ARROW_HEAD_WIDTH_OFFSET
+                    )
+                    * self.tile_size,
+                ),
+                (
+                    (pos[0] + _CIRCLE_PADDING_LEFT + _CIRCLE_OUTER_RADIUS)
+                    * self.tile_size,
+                    (pos[1] + _CIRCLE_PADDING_TOP + _CIRCLE_INNER_RADIUS)
+                    * self.tile_size,
+                ),
+                (
+                    (
+                        pos[0]
+                        + _CIRCLE_PADDING_LEFT
+                        + _CIRCLE_OUTER_RADIUS
+                        + _ARROW_HEAD_HEIGHT
+                    )
+                    * self.tile_size,
+                    (
+                        pos[1]
+                        + _CIRCLE_PADDING_TOP
+                        + _CIRCLE_INNER_RADIUS
+                        + _CIRCLE_ARROW_HEAD_WIDTH_OFFSET
+                    )
+                    * self.tile_size,
+                ),
+            ],
+        )
 
     def draw_arrow(
         self,
@@ -151,6 +243,7 @@ class Preview:
         end_pos: tuple[float, float],
         direction: Direction,
         color: pygame.Color,
+        index: int,
     ) -> None:
         left = min(start_pos[0], end_pos[0])
         top = min(start_pos[1], end_pos[1])
@@ -234,32 +327,31 @@ class Preview:
                     )
                 self.display_surface.blit(tile.surf, tile.rect)
         enemies = self.map.get_tiles(Enemy)
+        self.surface_overlay.fill((0, 0, 0, 0))
         for enemy in enemies:
             color = self.color_generator.get_color()
             path_points = enemy_to_path_points(enemy)
-            for path_point in path_points:
+            for i, path_point in enumerate(path_points):
                 if isinstance(path_point[0], int):
                     path_point = cast(tuple[int, int, int], path_point)
-                    self.draw_halt(path_point[0:2], path_point[2], color)
+                    self.draw_halt(path_point[0:2], path_point[2], color, i)
                 else:
                     path_point = cast(
                         tuple[float, float, float, float, Direction], path_point
                     )
                     self.draw_arrow(
-                        path_point[0:2], path_point[2:4], path_point[4], color
+                        path_point[0:2], path_point[2:4], path_point[4], color, i
                     )
-            surf = pygame.Surface((enemy.tile_size, enemy.tile_size), pygame.SRCALPHA)
-            surf.blit(
+            self.surface_overlay.blit(
                 pygame.font.SysFont(
                     "Times New Roman", self.tile_size // 5, bold=True
                 ).render(f"{enemy.chance_to_move:.0%}", True, _BLOCK_COLOR),
-                (self.tile_size * 0.1, self.tile_size * 0.1),
+                (
+                    self.tile_size * (enemy.pos[0] + 0.1),
+                    self.tile_size * (enemy.pos[1] + 0.1),
+                ),
             )
-
-            self.display_surface.blit(
-                surf, surf.get_rect(topleft=enemy.get_top_left(enemy.pos))
-            )
-
+        self.display_surface.blit(self.surface_overlay, self.surface_overlay.get_rect())
         pygame.display.update()
         while True:
             for event in pygame.event.get():
