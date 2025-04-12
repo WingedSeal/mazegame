@@ -4,7 +4,10 @@ from mazegame import *
 
 
 def script():
-    return
+    pass
+
+
+# run(script, TUTORIAL2)
 
 
 Preview(
@@ -25,5 +28,3 @@ Preview(
         ),
     ]
 ).run()
-
-# run(script, NORMAL4)

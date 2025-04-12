@@ -93,17 +93,17 @@ def enemy_to_path_points(
             case Direction.LEFT:
                 new_path = (
                     _path_points_tile[-1][0] + 0.5,
-                    _path_points_tile[-1][0] - _ARROW_PADDING,
+                    _path_points_tile[-1][1] - _ARROW_PADDING + 1,
                     _path_points_tile[-1][0] - length + 0.5,
-                    _path_points_tile[-1][0] - _ARROW_PADDING,
+                    _path_points_tile[-1][1] - _ARROW_PADDING + 1,
                     direction,
                 )
             case Direction.RIGHT:
                 new_path = (
                     _path_points_tile[-1][0] + 0.5,
-                    _path_points_tile[-1][0] + _ARROW_PADDING - 1,
+                    _path_points_tile[-1][1] + _ARROW_PADDING,
                     _path_points_tile[-1][0] + length + 0.5,
-                    _path_points_tile[-1][0] + _ARROW_PADDING - 1,
+                    _path_points_tile[-1][1] + _ARROW_PADDING,
                     direction,
                 )
             case Direction.HALT:
@@ -117,6 +117,8 @@ def enemy_to_path_points(
 
 class Preview:
     MIN_DESC_HEIGHT = 128
+    BG_COLOR = pygame.Color(0, 0, 0)
+    DESC_BG_COLOR = pygame.Color(20, 20, 20)
 
     def __init__(self, maps: list[Map]) -> None:
         self.maps = maps
@@ -125,6 +127,7 @@ class Preview:
         self.display_surface = pygame.display.set_mode(
             (Game.DEFAULT_WIDTH, Game.DEFAULT_HEIGHT)
         )
+        self.desc_surface = pygame.Surface((Game.DEFAULT_WIDTH, self.MIN_DESC_HEIGHT))
         self.map_index = 0
         self.is_show_path = True
 
@@ -354,10 +357,25 @@ class Preview:
                 ),
             )
 
-    def run(self):
+    def update_desc(self) -> None:
+        self.desc_surface.fill(self.DESC_BG_COLOR)
+
+        self.display_surface.blit(
+            self.desc_surface,
+            (
+                0,
+                Game.DEFAULT_HEIGHT - self.MIN_DESC_HEIGHT,
+                Game.DEFAULT_WIDTH,
+                self.MIN_DESC_HEIGHT,
+            ),
+        )
+
+    def run(self) -> None:
         while True:
+            self.display_surface.fill(self.BG_COLOR)
             self.init_map()
             self.update_map()
+            self.update_desc()
             if (self.map.width * self.tile_size) == Game.DEFAULT_WIDTH:
                 self.display_surface.blit(
                     self.map_surface,
