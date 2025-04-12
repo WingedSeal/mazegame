@@ -44,7 +44,7 @@ def get_color(
     direction: Direction = Direction.HALT, player_index: int = 0
 ) -> Color | None:
     """
-    Get the color of the tile in a direction compared to a player
+    Get the color of the tile in a direction compared to a player. Return None if it doesn't have color.
 
     :param direction: Which direction to look for tile, use Halt to get the tile player is on, defaults to Direction.Halt
     :param player_index: Which player to get tile from, defaults to 0
