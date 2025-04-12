@@ -43,7 +43,7 @@ TUTORIAL2_4 = Map(
 TUTORIAL2 = (
     [TUTORIAL2_1, TUTORIAL2_2, TUTORIAL2_3, TUTORIAL2_4],
     """The exit will always be above purple block!
-Technically, you can check for spike. But please don't do that~)""",
+Technically, you can check for exit. But please don't do that~)""",
 )
 
 

@@ -9,7 +9,10 @@ TUTORIAL5_1 = Map(
     ]
 )
 
-TUTORIAL5 = ([TUTORIAL5_1], "TUTORIAL5")
+TUTORIAL5 = (
+    [TUTORIAL5_1],
+    "If you try moving a player into a wall, that player will not move!",
+)
 
 # def script():
 #     move(RIGHT)

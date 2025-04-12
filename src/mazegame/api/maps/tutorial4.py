@@ -13,7 +13,7 @@ TUTORIAL4_1 = Map(
     ]
 )
 
-TUTORIAL4 = ([TUTORIAL4_1], "TUTORIAL4")
+TUTORIAL4 = ([TUTORIAL4_1], "Touching the key will open all doors with the same color.")
 
 # def script():
 #     move(DOWN)

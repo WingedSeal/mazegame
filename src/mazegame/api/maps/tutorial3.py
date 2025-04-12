@@ -14,7 +14,7 @@ TUTORIAL3_1 = Map(
     ]
 )
 
-TUTORIAL3 = ([TUTORIAL3_1], "TUTORIAL3")
+TUTORIAL3 = ([TUTORIAL3_1], "Wait for enemy to move out of the way before moving!")
 
 # def script():
 #     while get_tile(UP) == ENEMY:
