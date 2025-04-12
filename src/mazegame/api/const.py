@@ -60,4 +60,5 @@ __all__ = [
     "DOOR",
     "DOOR_FRAME",
     "KEY",
+    "LOCK",
 ]
