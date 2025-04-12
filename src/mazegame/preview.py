@@ -355,7 +355,27 @@ class Preview:
     def run(self):
         while True:
             self.update_map()
-            self.display_surface.blit(self.map_surface, (0, 0))
+            if (self.map.width * self.tile_size) == Game.DEFAULT_WIDTH:
+                self.display_surface.blit(
+                    self.map_surface,
+                    (
+                        0,
+                        (
+                            Game.DEFAULT_HEIGHT
+                            - self.MIN_DESC_HEIGHT
+                            - (self.map.width * self.tile_size)
+                        )
+                        // 2,
+                    ),
+                )
+            else:
+                self.display_surface.blit(
+                    self.map_surface,
+                    (
+                        (Game.DEFAULT_WIDTH - (self.map.width * self.tile_size)) // 2,
+                        0,
+                    ),
+                )
             pygame.display.update()
             while True:
                 for event in pygame.event.get():
