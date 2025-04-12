@@ -7,9 +7,11 @@ from .color import Color
 
 from .direction import Direction
 from .game import Game
-from .map import _BLOCK_COLOR, Enemy, Map, SurfsType
+from .map import Enemy, Map, SurfsType
 
 
+_TEXT_COLOR = pygame.Color(255, 255, 255)
+_TEXT_SHADOW_COLOR = pygame.Color(0, 0, 0)
 _ARROW_PADDING = 0.3
 _ARROW_WIDTH = 0.05
 _ARROW_HEAD_HEIGHT = 0.1
@@ -121,6 +123,12 @@ class Preview:
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         pygame.init()
         pygame.font.init()
+        self.font = pygame.font.SysFont(
+            "Times New Roman", self.tile_size // 5, bold=True
+        )
+        self.font_shadow = pygame.font.SysFont(
+            "Times New Roman", self.tile_size // 4, bold=True
+        )
         self.display_surface = pygame.display.set_mode(
             (self.screen_width, self.screen_height)
         )
@@ -159,21 +167,24 @@ class Preview:
     def draw_halt(
         self, pos: tuple[int, int], times: int, color: pygame.Color, index: int
     ) -> None:
-        self.surface_overlay.blit(
-            pygame.font.SysFont(
-                "Times New Roman", self.tile_size // 5, bold=True
-            ).render(f"x{times}", True, color),
-            (
-                self.tile_size
-                * (
-                    pos[0]
-                    + _CIRCLE_PADDING_LEFT
-                    + _CIRCLE_OUTER_RADIUS * 2
-                    + _TIMES_PADDING_LEFT
+        for font, text_color in (
+            (self.font_shadow, _TEXT_SHADOW_COLOR),
+            (self.font, color),
+        ):
+            self.surface_overlay.blit(
+                font.render(f"x{times}", True, text_color),
+                (
+                    self.tile_size
+                    * (
+                        pos[0]
+                        + _CIRCLE_PADDING_LEFT
+                        + _CIRCLE_OUTER_RADIUS * 2
+                        + _TIMES_PADDING_LEFT
+                    ),
+                    self.tile_size * (pos[1] + _TIMES_PADDING_TOP),
                 ),
-                self.tile_size * (pos[1] + _TIMES_PADDING_TOP),
-            ),
-        )
+            )
+
         pygame.draw.circle(
             self.surface_overlay,
             color,
@@ -236,6 +247,18 @@ class Preview:
                 ),
             ],
         )
+        for font, text_color in (
+            (self.font_shadow, _TEXT_SHADOW_COLOR),
+            (self.font, _TEXT_COLOR),
+        ):
+            self.surface_overlay.blit(
+                font.render(f"{index + 1}", True, text_color),
+                (
+                    self.tile_size
+                    * (pos[0] + _CIRCLE_PADDING_LEFT + (_CIRCLE_INNER_RADIUS / 2)),
+                    self.tile_size * (pos[1]),
+                ),
+            )
 
     def draw_arrow(
         self,
@@ -312,6 +335,17 @@ class Preview:
             ),
         )
         pygame.draw.polygon(self.display_surface, color, arrow_points)
+        for font, text_color in (
+            (self.font_shadow, _TEXT_SHADOW_COLOR),
+            (self.font, _TEXT_COLOR),
+        ):
+            self.surface_overlay.blit(
+                font.render(f"{index + 1}", True, text_color),
+                (
+                    self.tile_size * (left),
+                    self.tile_size * (top),
+                ),
+            )
 
     def run(self) -> None:
         self.display_surface.fill(Game.BG_COLOR)
@@ -343,12 +377,10 @@ class Preview:
                         path_point[0:2], path_point[2:4], path_point[4], color, i
                     )
             self.surface_overlay.blit(
-                pygame.font.SysFont(
-                    "Times New Roman", self.tile_size // 5, bold=True
-                ).render(f"{enemy.chance_to_move:.0%}", True, _BLOCK_COLOR),
+                self.font.render(f"{enemy.chance_to_move:.0%}", True, _TEXT_COLOR),
                 (
                     self.tile_size * (enemy.pos[0] + 0.1),
-                    self.tile_size * (enemy.pos[1] + 0.1),
+                    self.tile_size * (enemy.pos[1] + 0.3),
                 ),
             )
         self.display_surface.blit(self.surface_overlay, self.surface_overlay.get_rect())
