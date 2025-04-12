@@ -93,18 +93,18 @@ def enemy_to_path_points(
                 )
             case Direction.LEFT:
                 new_path = (
-                    _path_points_tile[-1][0] - 0.5,
-                    _path_points_tile[-1][0] + _ARROW_PADDING,
-                    _path_points_tile[-1][0] - length - 0.5,
-                    _path_points_tile[-1][0] + _ARROW_PADDING,
+                    _path_points_tile[-1][0] + 0.5,
+                    _path_points_tile[-1][0] - _ARROW_PADDING,
+                    _path_points_tile[-1][0] - length + 0.5,
+                    _path_points_tile[-1][0] - _ARROW_PADDING,
                     direction,
                 )
             case Direction.RIGHT:
                 new_path = (
-                    _path_points_tile[-1][0] - 0.5,
-                    _path_points_tile[-1][0] + 1 - _ARROW_PADDING,
-                    _path_points_tile[-1][0] + length - 0.5,
-                    _path_points_tile[-1][0] + 1 - _ARROW_PADDING,
+                    _path_points_tile[-1][0] + 0.5,
+                    _path_points_tile[-1][0] + _ARROW_PADDING - 1,
+                    _path_points_tile[-1][0] + length + 0.5,
+                    _path_points_tile[-1][0] + _ARROW_PADDING - 1,
                     direction,
                 )
             case Direction.HALT:
@@ -317,7 +317,7 @@ class Preview:
             case Direction.RIGHT:
                 arrow_points = [
                     (left + size_x, top + size_y + _ARROW_HEAD_WIDTH_OFFSET),
-                    (left + size_x - _ARROW_HEAD_HEIGHT, top + size_y / 2),
+                    (left + size_x + _ARROW_HEAD_HEIGHT, top + size_y / 2),
                     (left + size_x, top - _ARROW_HEAD_WIDTH_OFFSET),
                 ]
 
