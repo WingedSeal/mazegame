@@ -2,11 +2,13 @@ from math import floor
 from typing import cast
 import pygame
 
+from .map import images
+
 from .color import Color
 
 from .direction import Direction
 from .game import Game
-from .map import Enemy, Map, SurfsType
+from .map import Enemy, Map, SurfsType, pos_to_pixel
 
 
 _TEXT_COLOR = pygame.Color(255, 255, 255)
@@ -129,6 +131,7 @@ class Preview:
         self.display_surface = pygame.display.set_mode(
             (Game.DEFAULT_WIDTH, Game.DEFAULT_HEIGHT)
         )
+
         self.desc_surface = pygame.Surface((Game.DEFAULT_WIDTH, self.MIN_DESC_HEIGHT))
         self.map_index = 0
         self.is_show_path = True
@@ -139,6 +142,9 @@ class Preview:
         self.tile_size, self.screen_width, self.screen_height = self._get_tile_size()
         self.font = pygame.font.SysFont(
             "Times New Roman", self.tile_size // 5, bold=True
+        )
+        self.floor_surface = pygame.transform.scale(
+            images.get_surface("None"), (self.tile_size, self.tile_size)
         )
         self.desc_font_index = pygame.font.SysFont("Times New Roman", 30, bold=True)
         self.desc_font_key = pygame.font.SysFont("Times New Roman", 10, bold=True)
@@ -464,14 +470,28 @@ class Preview:
 
     def update_map(self) -> None:
         self.map_surface.fill(Game.BG_COLOR)
-        for row in self.map.map:
-            for tile in row:
+        for y, row in enumerate(self.map.map):
+            for x, tile in enumerate(row):
                 if tile is None:
+                    self.map_surface.blit(
+                        self.floor_surface,
+                        self.floor_surface.get_rect(
+                            topleft=pos_to_pixel(self.tile_size, (x, y))
+                        ),
+                    )
                     continue
                 assert hasattr(tile, "surf")
                 assert hasattr(tile, "rect")
                 if tile.tile_under is not None:
                     self.map_surface.blit(tile.tile_under.surf, tile.tile_under.rect)
+                else:
+
+                    self.map_surface.blit(
+                        self.floor_surface,
+                        self.floor_surface.get_rect(
+                            topleft=pos_to_pixel(self.tile_size, (x, y))
+                        ),
+                    )
                 self.map_surface.blit(tile.surf, tile.rect)
         if not self.is_show_path:
             return
