@@ -11,7 +11,17 @@ from scipy.ndimage import gaussian_filter
 
 from .color import Color
 from .direction import Direction
-from .map import HasColor, Enemy, Map, Player, SurfsType, Tile, TouchableTile
+from .map import (
+    HasColor,
+    Enemy,
+    Map,
+    Player,
+    SurfsType,
+    Tile,
+    TouchableTile,
+    images,
+    pos_to_pixel,
+)
 from .control import Control
 
 
@@ -101,6 +111,9 @@ class Game:
         pygame.display.set_caption(self.TITLE)
         self.delta_ms = 0.0
         self.tick_delta_ms = 0.0
+        self.floor_surface = pygame.transform.scale(
+            images.get_surface("None"), (self.tile_size, self.tile_size)
+        )
         self.moving_tiles: list[Tile] = []
         self.tick_count = 0
         """Time delta in milisecond"""
@@ -198,9 +211,15 @@ class Game:
         t = min(self.tick_delta_ms / self.MSPT, 1)
         for tile in self.moving_tiles:
             tile.animate(t)
-        for row in self.map.map:
-            for tile in row:
+        for y, row in enumerate(self.map.map):
+            for x, tile in enumerate(row):
                 if tile is None:
+                    self.display_surface.blit(
+                        self.floor_surface,
+                        self.floor_surface.get_rect(
+                            topleft=pos_to_pixel(self.tile_size, (x, y))
+                        ),
+                    )
                     continue
                 if any(tile is _tile for _tile in self.moving_tiles):
                     continue
@@ -209,6 +228,13 @@ class Game:
                 if tile.tile_under is not None:
                     self.display_surface.blit(
                         tile.tile_under.surf, tile.tile_under.rect
+                    )
+                else:
+                    self.display_surface.blit(
+                        self.floor_surface,
+                        self.floor_surface.get_rect(
+                            topleft=pos_to_pixel(self.tile_size, (x, y))
+                        ),
                     )
                 self.display_surface.blit(tile.surf, tile.rect)
 

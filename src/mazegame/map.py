@@ -9,6 +9,7 @@ import pygame
 if TYPE_CHECKING:
     from .game import Game
 
+from .images import Images
 from .direction import Direction
 from .color import Color
 
@@ -23,6 +24,8 @@ _EXIT_OUTER_COLOR = pygame.Color(0, 150, 0)
 _EXIT_INNER_COLOR = pygame.Color(102, 255, 102)
 _DOOR_COLOR = pygame.Color(139, 69, 19)
 
+images = Images()
+
 
 def _lerp(a: tuple[float, float], b: tuple[float, float], t: float) -> tuple[int, int]:
     return (
@@ -35,6 +38,15 @@ def _dash_lerp(
     a: tuple[float, float], b: tuple[float, float], t: float
 ) -> tuple[int, int]:
     return _lerp(a, b, 1 - (1 - t) ** 4)
+
+
+def pos_to_pixel(
+    tile_size: int, pos: tuple[int, int], padding: tuple[int, int] = (0, 0)
+) -> tuple[int, int]:
+    return (
+        tile_size * pos[0] + padding[0],
+        tile_size * pos[1] + padding[1],
+    )
 
 
 class Tile(ABC, pygame.sprite.Sprite):
@@ -55,19 +67,11 @@ class Tile(ABC, pygame.sprite.Sprite):
     ) -> None:
         pass
 
-    def _pos_to_pixel(
-        self, pos: tuple[int, int], padding: tuple[int, int] = (0, 0)
-    ) -> tuple[int, int]:
-        return (
-            self.tile_size * pos[0] + padding[0],
-            self.tile_size * pos[1] + padding[1],
-        )
-
     def drop(self) -> None:
         pass
 
     def get_top_left(self, pos: tuple[int, int]) -> tuple[int, int]:
-        return self._pos_to_pixel(pos)
+        return pos_to_pixel(self.tile_size, pos)
 
     def animate(self, t: float):
         """
@@ -89,6 +93,11 @@ class Tile(ABC, pygame.sprite.Sprite):
             if self.__class__.__name__ == value:
                 return True
         return False
+
+    def to_image_name(self) -> str:
+        if isinstance(self, HasColor):
+            return f"{type(self).__name__}_{self.get_color()}"
+        return type(self).__name__
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__} at {self.pos}"
@@ -119,15 +128,18 @@ class Block(Tile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
-            self.surf.fill(_BLOCK_COLOR)
-            self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size, tile_size * 0.1))
-            self.surf.fill(
-                _BLOCK_EDGE_COLOR, (0, tile_size * 0.9, tile_size, tile_size * 0.1)
-            )
-            self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size * 0.1, tile_size))
-            self.surf.fill(
-                _BLOCK_EDGE_COLOR, (tile_size * 0.9, 0, tile_size * 0.1, tile_size)
+            # self.surf = pygame.Surface((tile_size, tile_size))
+            # self.surf.fill(_BLOCK_COLOR)
+            # self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size, tile_size * 0.1))
+            # self.surf.fill(
+            #     _BLOCK_EDGE_COLOR, (0, tile_size * 0.9, tile_size, tile_size * 0.1)
+            # )
+            # self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size * 0.1, tile_size))
+            # self.surf.fill(
+            #     _BLOCK_EDGE_COLOR, (tile_size * 0.9, 0, tile_size * 0.1, tile_size)
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
             surfs[type(self)] = self.surf
         else:
@@ -151,8 +163,11 @@ class ColoredFloor(TouchableTile, HasColor):
         self.tile_size = tile_size
         self.pos = pos
         if (type(self), self.color) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
-            self.surf.fill(self.color.value)
+            # self.surf = pygame.Surface((tile_size, tile_size))
+            # self.surf.fill(self.color.value)
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
+            )
             surfs[type(self), self.color] = self.surf
         else:
             self.surf = surfs[type(self), self.color]
@@ -184,17 +199,19 @@ class ColoredBlock(Tile, HasColor):
         self.tile_size = tile_size
         self.pos = pos
         if (type(self), self.color) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size))
-            self.surf.fill(self.color.value)
-            self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size, tile_size * 0.1))
-            self.surf.fill(
-                _BLOCK_EDGE_COLOR, (0, tile_size * 0.9, tile_size, tile_size * 0.1)
+            # self.surf = pygame.Surface((tile_size, tile_size))
+            # self.surf.fill(self.color.value)
+            # self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size, tile_size * 0.1))
+            # self.surf.fill(
+            #     _BLOCK_EDGE_COLOR, (0, tile_size * 0.9, tile_size, tile_size * 0.1)
+            # )
+            # self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size * 0.1, tile_size))
+            # self.surf.fill(
+            #     _BLOCK_EDGE_COLOR, (tile_size * 0.9, 0, tile_size * 0.1, tile_size)
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
-            self.surf.fill(_BLOCK_EDGE_COLOR, (0, 0, tile_size * 0.1, tile_size))
-            self.surf.fill(
-                _BLOCK_EDGE_COLOR, (tile_size * 0.9, 0, tile_size * 0.1, tile_size)
-            )
-
             surfs[type(self), self.color] = self.surf
         else:
             self.surf = surfs[type(self), self.color]
@@ -219,12 +236,15 @@ class Player(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-            pygame.draw.circle(
-                self.surf,
-                _PLAYER_COLOR,
-                (tile_size // 2, tile_size // 2),
-                0.9 * tile_size // 2,
+            # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            # pygame.draw.circle(
+            #     self.surf,
+            #     _PLAYER_COLOR,
+            #     (tile_size // 2, tile_size // 2),
+            #     0.9 * tile_size // 2,
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
             surfs[type(self)] = self.surf
         else:
@@ -269,24 +289,27 @@ class Door(Tile, HasColor):
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-            self.surf.fill(
-                _DOOR_COLOR,
-                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.375, tile_size * 0.6),
+        if (type(self), self.color) not in surfs:
+            # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            # self.surf.fill(
+            #     _DOOR_COLOR,
+            #     (tile_size * 0.1, tile_size * 0.2, tile_size * 0.375, tile_size * 0.6),
+            # )
+            # self.surf.fill(
+            #     _DOOR_COLOR,
+            #     (
+            #         tile_size * 0.525,
+            #         tile_size * 0.2,
+            #         tile_size * 0.375,
+            #         tile_size * 0.6,
+            #     ),
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
-            self.surf.fill(
-                _DOOR_COLOR,
-                (
-                    tile_size * 0.525,
-                    tile_size * 0.2,
-                    tile_size * 0.375,
-                    tile_size * 0.6,
-                ),
-            )
-            surfs[type(self)] = self.surf
+            surfs[(type(self), self.color)] = self.surf
         else:
-            self.surf = surfs[type(self)]
+            self.surf = surfs[(type(self), self.color)]
         self.rect = self.surf.get_rect()
 
     def get_color(self) -> Color:
