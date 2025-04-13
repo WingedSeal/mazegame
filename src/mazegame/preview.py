@@ -468,30 +468,27 @@ class Preview:
                 if is_re_render:
                     break
 
+    def fill_floor(self) -> None:
+        for y in range(self.map.height):
+            for x in range(self.map.width):
+                self.map_surface.blit(
+                    self.floor_surface,
+                    self.floor_surface.get_rect(
+                        topleft=pos_to_pixel(self.tile_size, (x, y))
+                    ),
+                )
+
     def update_map(self) -> None:
-        self.map_surface.fill(Game.BG_COLOR)
+        # self.map_surface.fill(Game.BG_COLOR)
+        self.fill_floor()
         for y, row in enumerate(self.map.map):
             for x, tile in enumerate(row):
                 if tile is None:
-                    self.map_surface.blit(
-                        self.floor_surface,
-                        self.floor_surface.get_rect(
-                            topleft=pos_to_pixel(self.tile_size, (x, y))
-                        ),
-                    )
                     continue
                 assert hasattr(tile, "surf")
                 assert hasattr(tile, "rect")
                 if tile.tile_under is not None:
                     self.map_surface.blit(tile.tile_under.surf, tile.tile_under.rect)
-                else:
-
-                    self.map_surface.blit(
-                        self.floor_surface,
-                        self.floor_surface.get_rect(
-                            topleft=pos_to_pixel(self.tile_size, (x, y))
-                        ),
-                    )
                 self.map_surface.blit(tile.surf, tile.rect)
         if not self.is_show_path:
             return

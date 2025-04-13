@@ -10,6 +10,6 @@ class Images:
     def get_surface(self, name: str) -> pygame.Surface:
         if name not in self.surfaces:
             self.surfaces[name] = pygame.image.load(
-                f"assets/sprite/{name}.jpg"
-            ).convert()
+                f"assets/sprite/{name}.png"
+            ).convert_alpha()
         return self.surfaces[name]

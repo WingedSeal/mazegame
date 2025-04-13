@@ -130,6 +130,16 @@ class Game:
                 if tile._auto_remove:
                     self.map.map[y][x] = tile.tile_under
 
+    def fill_floor(self) -> None:
+        for y in range(self.map.height):
+            for x in range(self.map.width):
+                self.display_surface.blit(
+                    self.floor_surface,
+                    self.floor_surface.get_rect(
+                        topleft=pos_to_pixel(self.tile_size, (x, y))
+                    ),
+                )
+
     def _get_tile_size(self) -> tuple[int, int, int]:
         """
         Calculate tile size in pixel from map
@@ -202,7 +212,8 @@ class Game:
             enemy.index = (enemy.index + 1) % len(enemy.path)
 
     def _update_gameplay(self) -> None:
-        self.display_surface.fill(self.BG_COLOR)
+        # self.display_surface.fill(self.BG_COLOR)
+        self.fill_floor()
 
         if self.tick_delta_ms > self.MSPT:
             self.tick_delta_ms -= self.MSPT
@@ -211,15 +222,9 @@ class Game:
         t = min(self.tick_delta_ms / self.MSPT, 1)
         for tile in self.moving_tiles:
             tile.animate(t)
-        for y, row in enumerate(self.map.map):
-            for x, tile in enumerate(row):
+        for row in self.map.map:
+            for tile in row:
                 if tile is None:
-                    self.display_surface.blit(
-                        self.floor_surface,
-                        self.floor_surface.get_rect(
-                            topleft=pos_to_pixel(self.tile_size, (x, y))
-                        ),
-                    )
                     continue
                 if any(tile is _tile for _tile in self.moving_tiles):
                     continue
@@ -229,13 +234,7 @@ class Game:
                     self.display_surface.blit(
                         tile.tile_under.surf, tile.tile_under.rect
                     )
-                else:
-                    self.display_surface.blit(
-                        self.floor_surface,
-                        self.floor_surface.get_rect(
-                            topleft=pos_to_pixel(self.tile_size, (x, y))
-                        ),
-                    )
+
                 self.display_surface.blit(tile.surf, tile.rect)
 
         for tile in self.moving_tiles:
