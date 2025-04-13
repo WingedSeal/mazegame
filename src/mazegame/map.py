@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import random
-from typing import TYPE_CHECKING, Any, Type, TypeVar, override
+from typing import TYPE_CHECKING, Type, TypeVar
 
 
 import pygame

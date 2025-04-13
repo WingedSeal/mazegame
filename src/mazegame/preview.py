@@ -368,7 +368,7 @@ class Preview:
             f"< {self.map_index + 1}/{len(self.maps)} >", True, _TEXT_COLOR
         )
         text_key = self.desc_font_key.render(
-            f"Press <space> to {'hide' if self.is_show_path else 'show' } paths. Press < for previous map, > for next map.",
+            f"Press <space> to {'hide' if self.is_show_path else 'show' } paths. Press arrow keys to cycle through maps.",
             True,
             _TEXT_COLOR,
         )
