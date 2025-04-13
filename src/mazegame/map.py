@@ -539,18 +539,21 @@ class Spike(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-            points: list[tuple[int, int]] = [
-                (0, tile_size),
-                (tile_size * 1 // 6, 0),
-                (tile_size * 2 // 6, int(tile_size * 0.9)),
-                (tile_size * 3 // 6, 0),
-                (tile_size * 4 // 6, int(tile_size * 0.9)),
-                (tile_size * 5 // 6, 0),
-                (tile_size, tile_size),
-            ]
+            # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            # points: list[tuple[int, int]] = [
+            #     (0, tile_size),
+            #     (tile_size * 1 // 6, 0),
+            #     (tile_size * 2 // 6, int(tile_size * 0.9)),
+            #     (tile_size * 3 // 6, 0),
+            #     (tile_size * 4 // 6, int(tile_size * 0.9)),
+            #     (tile_size * 5 // 6, 0),
+            #     (tile_size, tile_size),
+            # ]
 
-            pygame.draw.polygon(self.surf, _SPIKE_COLOR, points)
+            # pygame.draw.polygon(self.surf, _SPIKE_COLOR, points)
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
+            )
             surfs[type(self)] = self.surf
         else:
             self.surf = surfs[type(self)]
@@ -584,13 +587,16 @@ class Exit(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-            self.surf.fill(_EXIT_OUTER_COLOR)
-            pygame.draw.circle(
-                self.surf,
-                _EXIT_INNER_COLOR,
-                (tile_size // 2, tile_size // 2),
-                0.9 * tile_size // 2,
+            # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            # self.surf.fill(_EXIT_OUTER_COLOR)
+            # pygame.draw.circle(
+            #     self.surf,
+            #     _EXIT_INNER_COLOR,
+            #     (tile_size // 2, tile_size // 2),
+            #     0.9 * tile_size // 2,
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
             surfs[type(self)] = self.surf
         else:
@@ -620,14 +626,16 @@ class Enemy(TouchableTile):
         self.tile_size = tile_size
         self.pos = pos
         if type(self) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-            pygame.draw.circle(
-                self.surf,
-                _ENEMY_COLOR,
-                (tile_size // 2, tile_size // 2),
-                0.9 * tile_size // 2,
+            # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            # pygame.draw.circle(
+            #     self.surf,
+            #     _ENEMY_COLOR,
+            #     (tile_size // 2, tile_size // 2),
+            #     0.9 * tile_size // 2,
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
-
             surfs[type(self)] = self.surf
         else:
             self.surf = surfs[type(self)]
