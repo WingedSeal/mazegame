@@ -37,8 +37,8 @@ class TestBasicRender(unittest.TestCase):
                 [Key(Color.RED), Lock(Color.RED), None],
             ]
         )
-        # _test_run(empty_script, map, exit_on_tick=1)
-        _test_run(empty_script, map, exit_on_tick=None, is_render=True)
+        _test_run(empty_script, map, exit_on_tick=1)
+        # _test_run(empty_script, map, exit_on_tick=None, is_render=True)
 
 
 if __name__ == "__main__":
