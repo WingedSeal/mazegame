@@ -125,6 +125,7 @@ class Preview:
         self.map_desc = map_desc
         pygame.init()
         pygame.font.init()
+        pygame.display.set_caption(Game.TITLE + " (preview)")
         self.display_surface = pygame.display.set_mode(
             (Game.DEFAULT_WIDTH, Game.DEFAULT_HEIGHT)
         )
