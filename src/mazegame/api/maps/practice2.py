@@ -11,7 +11,7 @@ X   _  X
 XP _E_ X
 X   _  X
 XXXXXXXX
-XS     X
+XS  S  X
 X_ _ _ X
 XPS S _X
 X   SX X
@@ -28,22 +28,33 @@ XXXXXXXX
 )
 PRACTICE2 = ([PRACTICE2_1], "It's ok to lock some doors, as long as you can get in.")
 
+# Solution 1 (12 moves)
 # def script():
+#     move(DOWN)
 #     move(RIGHT)
-#     move(DOWN)
-#     move(DOWN)
-#     for _ in range(4):
-#         move(LEFT)
-#     for _ in range(4):
-#         move(UP)
-#     for _ in range(4):
-#         move(RIGHT)
-#     move(UP)
 #     move(RIGHT)
 #     move(UP)
+#     move(UP)
+#     move(UP)
+#     move(DOWN)
+#     move(RIGHT)
+#     move(RIGHT)
+#     move(UP)
+#     move(DOWN)
 #     move(LEFT)
+
+# Solution 2 (13 moves)
+# def script():
 #     move(DOWN)
-#     for _ in range(3):
-#         move(LEFT)
+#     move(RIGHT)
+#     move(RIGHT)
 #     move(UP)
+#     move(UP)
+#     move(RIGHT)
+#     move(RIGHT)
+#     move(RIGHT)
+#     move(DOWN)
+#     move(DOWN)
+#     move(LEFT)
+#     move(LEFT)
 #     move(UP)

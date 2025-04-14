@@ -57,6 +57,7 @@ class GameOverData:
 class VictoryData:
     heading_surface: pygame.Surface
     subheading_surface: pygame.Surface
+    tick_count_surface: pygame.Surface
 
 
 @dataclass
@@ -302,6 +303,12 @@ class Game:
                 center=(center[0], center[1] + 20)
             ),
         )
+        self.display_surface.blit(
+            self.victory_data.tick_count_surface,
+            self.victory_data.tick_count_surface.get_rect(
+                center=(center[0], center[1] + 40)
+            ),
+        )
 
     def game_over(self, reason: str, tips: str) -> None:
         self.state = GameState.GAME_OVER
@@ -322,6 +329,11 @@ class Game:
         self.victory_data = VictoryData(
             self.fonts.heading.render("Victory!", True, (100, 200, 100)),
             self.fonts.subheading.render(victory_msg, True, (200, 200, 200)),
+            self.fonts.subheading.render(
+                f"You completed the map in {self.tick_count} move{"s" if self.tick_count != 1 else ""}.",
+                True,
+                (200, 200, 200),
+            ),
         )
 
     def update(self) -> bool:
