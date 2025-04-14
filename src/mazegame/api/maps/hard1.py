@@ -3,8 +3,7 @@ from ...color import Color
 from ...map import Door, Enemy, Exit, Key, Map, Block, Player
 
 ENEMY = Enemy(
-    [Direction.UP] * 10 + [Direction.DOWN] * 10,
-    chance_to_move=0.5,
+    [Direction.UP] * 10 + [Direction.DOWN] * 10, chance_to_move=0.5, boss=True
 )
 
 HARD1_1 = Map(

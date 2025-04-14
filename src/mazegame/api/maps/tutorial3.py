@@ -7,7 +7,11 @@ TUTORIAL3_1 = Map(
         [
             None,
             None,
-            Enemy([Direction.LEFT] * 2 + [Direction.RIGHT] * 2, chance_to_move=0.5),
+            Enemy(
+                [Direction.LEFT] * 2 + [Direction.RIGHT] * 2,
+                chance_to_move=0.5,
+                boss=True,
+            ),
             Block(),
         ],
         [Block(), Block(), Player(), Block()],
