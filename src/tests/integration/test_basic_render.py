@@ -40,6 +40,24 @@ class TestBasicRender(unittest.TestCase):
         _test_run(empty_script, map, exit_on_tick=1)
         # _test_run(empty_script, map, exit_on_tick=None, is_render=True)
 
+    def _test_every_possible_tile(self):
+        tiles = [Spike(), Player(), Enemy([]), Enemy([], boss=True), Exit(), Block()]
+        _pad = len(list(Color)) - len(tiles)
+        assert _pad >= 1
+        tiles.extend([None] * _pad)
+        map = Map(
+            [
+                [ColoredBlock(color) for color in list(Color)],
+                [ColoredFloor(color) for color in list(Color)],
+                [Door(color) for color in list(Color)],
+                [Door(color, open=True) for color in list(Color)],
+                [Key(color) for color in list(Color)],
+                [Lock(color) for color in list(Color)],
+                tiles,
+            ]
+        )
+        _test_run(empty_script, map, exit_on_tick=None, is_render=True)
+
 
 if __name__ == "__main__":
     unittest.main()

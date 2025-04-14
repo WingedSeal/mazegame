@@ -474,7 +474,7 @@ class Lock(TouchableTile, HasColor):
             pygame.draw.circle(
                 self.surf,
                 self.color.value,
-                (tile_size // 2, int(0.4 * tile_size)),
+                ((tile_size // 2) - 1, int(0.4 * tile_size)),
                 int(0.1 * tile_size),
             )
             pygame.draw.circle(
