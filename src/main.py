@@ -6,4 +6,4 @@ def script():
 
 
 # run(script, NORMAL1)
-preview(NORMAL4)
+preview(PRACTICE1)
