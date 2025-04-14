@@ -1,31 +1,32 @@
 from ...map_maker import map_maker
 from ...color import Color
-from ...map import Door, Key, Map
+from ...map import Door, Key, Map, Lock
 
-color1, color2 = Color.get_unique_colors(2)
-PRACTICE1_1 = Map(
+colors = Color.get_unique_colors(4)
+PRACTICE2_1 = Map(
     map_maker(
         f"""
- XXXXXXX
- XEXXSXX
-XX_XX  X
-X     SX
-X SXXPXX
-X _   XX
 XXXXXXXX
-   X  _X
-XXS _X_X
-X      X
-XX XXX X
- X XP  X
- X XS  X
- X    XX
+X   _  X
+XP _E_ X
+X   _  X
+XXXXXXXX
+XS     X
+X_ _ _ X
+XPS S _X
+X   SX X
 XXXXXXXX
 """,
-        [Door(color1), Key(color2), Key(color1), Door(color1), Door(color2)],
+        [
+            *(Door(color, open=True) for color in colors),
+            Lock(colors[3]),
+            Lock(colors[1]),
+            Lock(colors[0]),
+            Lock(colors[2]),
+        ],
     )
 )
-PRACTICE1 = ([PRACTICE1_1], "There are 2 players.")
+PRACTICE2 = ([PRACTICE2_1], "It's ok to lock some doors, as long as you can get in.")
 
 # def script():
 #     move(RIGHT)
