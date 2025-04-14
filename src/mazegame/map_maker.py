@@ -6,6 +6,27 @@ def map_maker(
     replacement_list: list[Tile] = [],
     replacement_dict: dict[str, Tile] = {},
 ) -> list[list[Tile | None]]:
+    """
+    Input map in form of string instead.
+
+    :param map_str: Multiline string
+
+        - "X" = Block
+
+        - "E" = Exit
+
+        - " " = None (Floor)
+
+        - "S" = Spike
+
+        - "P" = Player
+
+        - "\\_" means use the nth item in the `replacement_list`
+
+    :param replacement_list: List of replacement tile to replace "_", defaults to []
+    :param replacement_dict: Custom replacement tile for custom letter, defaults to {}
+    :return: Array for map
+    """
     if "_" in replacement_dict:
         raise ValueError("'_' can't be a key in replacement_dict")
     assert map_str[0] == "\n"
