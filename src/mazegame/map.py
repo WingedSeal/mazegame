@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import random
-from typing import TYPE_CHECKING, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Type, TypeVar
 
 
 import pygame
@@ -13,7 +13,7 @@ from .images import Images
 from .direction import Direction
 from .color import Color
 
-SurfsType = dict[type["Tile"] | tuple[type["HasColor"], Color], pygame.Surface]
+SurfsType = dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface]
 
 _BLOCK_EDGE_COLOR = pygame.Color(215, 220, 225)
 _BLOCK_COLOR = pygame.Color(195, 200, 205)
@@ -614,10 +614,20 @@ class Exit(TouchableTile):
 
 
 class Enemy(TouchableTile):
-    def __init__(self, path: list[Direction], chance_to_move: float = 1.0) -> None:
+    def __init__(
+        self, path: list[Direction], chance_to_move: float = 1.0, *, boss: float = False
+    ) -> None:
+        """
+        Enemy
+
+        :param path: Enemy's path (movement)
+        :param chance_to_move: Chance for enemy to move in each tick ranges from 0 to 1, defaults to 1.0
+        :param boss: Does literally nothing but change texture, defaults to False
+        """
         self.index = 0
         self.path = path
         self.chance_to_move = chance_to_move
+        self.boss = boss
         super().__init__()
 
     def init(
@@ -628,7 +638,7 @@ class Enemy(TouchableTile):
     ) -> None:
         self.tile_size = tile_size
         self.pos = pos
-        if type(self) not in surfs:
+        if (type(self), self.boss) not in surfs:
             # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
             # pygame.draw.circle(
             #     self.surf,
@@ -639,10 +649,15 @@ class Enemy(TouchableTile):
             self.surf = pygame.transform.scale(
                 images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
-            surfs[type(self)] = self.surf
+            surfs[type(self), self.boss] = self.surf
         else:
-            self.surf = surfs[type(self)]
+            self.surf = surfs[type(self), self.boss]
         self.rect = self.surf.get_rect()
+
+    def to_image_name(self) -> str:
+        if not self.boss:
+            return super().to_image_name()
+        return super().to_image_name() + "_Boss"
 
     def interacted_with(self, other_tile: Tile, game: "Game") -> None:
         if not isinstance(other_tile, Player):
