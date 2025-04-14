@@ -337,27 +337,30 @@ class DoorFrame(TouchableTile, HasColor):
         self.tile_size = tile_size
         self.pos = pos
         if (type(self), self.color) not in surfs:
-            self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
-            self.surf.fill(
-                self.color.value,
-                (0, 0, tile_size * 0.1, tile_size),
-            )
-            self.surf.fill(
-                self.color.value,
-                (tile_size * 0.9, 0, tile_size * 0.1, tile_size),
-            )
-            self.surf.fill(
-                _DOOR_COLOR,
-                (tile_size * 0.1, tile_size * 0.2, tile_size * 0.025, tile_size * 0.6),
-            )
-            self.surf.fill(
-                _DOOR_COLOR,
-                (
-                    tile_size * 0.875,
-                    tile_size * 0.2,
-                    tile_size * 0.025,
-                    tile_size * 0.6,
-                ),
+            # self.surf = pygame.Surface((tile_size, tile_size), pygame.SRCALPHA)
+            # self.surf.fill(
+            #     self.color.value,
+            #     (0, 0, tile_size * 0.1, tile_size),
+            # )
+            # self.surf.fill(
+            #     self.color.value,
+            #     (tile_size * 0.9, 0, tile_size * 0.1, tile_size),
+            # )
+            # self.surf.fill(
+            #     _DOOR_COLOR,
+            #     (tile_size * 0.1, tile_size * 0.2, tile_size * 0.025, tile_size * 0.6),
+            # )
+            # self.surf.fill(
+            #     _DOOR_COLOR,
+            #     (
+            #         tile_size * 0.875,
+            #         tile_size * 0.2,
+            #         tile_size * 0.025,
+            #         tile_size * 0.6,
+            #     ),
+            # )
+            self.surf = pygame.transform.scale(
+                images.get_surface(self.to_image_name()), (tile_size, tile_size)
             )
             surfs[type(self), self.color] = self.surf
         else:
