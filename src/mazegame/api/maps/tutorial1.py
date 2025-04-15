@@ -1,18 +1,22 @@
-from ...map import Block, Exit, Map, Player
+from ...map import Block, CustomMapType, Exit, Map, Player
 
-# fmt: off
-TUTORIAL1_1 = Map(
-    [
-        [Block(), Exit(), Block()],
-        [Block(), None, Block()],
-        [Block(), None, Block()],
-        [Block(), None, Block()],
-        [Block(), Player(), Block()]
-    ]
-)
-# fmt: on
 
-TUTORIAL1 = ([TUTORIAL1_1], "Use 'move(UP)' to reach the exit!")
+def _get_map():
+    # fmt: off
+    TUTORIAL1_1 = Map(
+        [
+            [Block(), Exit(), Block()],
+            [Block(), None, Block()],
+            [Block(), None, Block()],
+            [Block(), None, Block()],
+            [Block(), Player(), Block()]
+        ]
+    )
+    # fmt: on
+    return ([TUTORIAL1_1], "Use 'move(UP)' to reach the exit!")
+
+
+TUTORIAL1: CustomMapType = _get_map
 
 # def script():
 #     for _ in range(4):

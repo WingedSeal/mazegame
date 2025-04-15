@@ -1,31 +1,36 @@
 from ...map_maker import map_maker
 from ...color import Color
-from ...map import Door, Key, Map
+from ...map import CustomMapType, Door, Key, Map
 
-color1, color2 = Color.get_unique_colors(2)
-PRACTICE1_1 = Map(
-    map_maker(
-        f"""
- XXXXXXX
- XEXXSXX
-XX_XX  X
-X     SX
-X SXXPXX
-X _   XX
-XXXXXXXX
-   X  _X
-XXS _X_X
-X      X
-XX XXX X
- X XP  X
- X XS  X
- X    XX
-XXXXXXXX
-""",
-        [Door(color1), Key(color2), Key(color1), Door(color1), Door(color2)],
+
+def _get_map():
+    color1, color2 = Color.get_unique_colors(2)
+    PRACTICE1_1 = Map(
+        map_maker(
+            f"""
+    XXXXXXX
+    XEXXSXX
+    XX_XX  X
+    X     SX
+    X SXXPXX
+    X _   XX
+    XXXXXXXX
+    X  _X
+    XXS _X_X
+    X      X
+    XX XXX X
+    X XP  X
+    X XS  X
+    X    XX
+    XXXXXXXX
+    """,
+            [Door(color1), Key(color2), Key(color1), Door(color1), Door(color2)],
+        )
     )
-)
-PRACTICE1 = ([PRACTICE1_1], "There are 2 players.")
+    return ([PRACTICE1_1], "There are 2 players.")
+
+
+PRACTICE1: CustomMapType = _get_map
 
 # def script():
 #     move(RIGHT)

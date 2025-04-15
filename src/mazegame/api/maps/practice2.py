@@ -1,11 +1,13 @@
 from ...map_maker import map_maker
 from ...color import Color
-from ...map import Door, Key, Map, Lock
+from ...map import CustomMapType, Door, Key, Map, Lock
 
-colors = Color.get_unique_colors(4)
-PRACTICE2_1 = Map(
-    map_maker(
-        f"""
+
+def _get_map():
+    colors = Color.get_unique_colors(4)
+    PRACTICE2_1 = Map(
+        map_maker(
+            f"""
 XXXXXXXX
 X   _  X
 XP _E_ X
@@ -17,16 +19,19 @@ XPS S _X
 X   SX X
 XXXXXXXX
 """,
-        [
-            *(Door(color, open=True) for color in colors),
-            Lock(colors[3]),
-            Lock(colors[1]),
-            Lock(colors[0]),
-            Lock(colors[2]),
-        ],
+            [
+                *(Door(color, open=True) for color in colors),
+                Lock(colors[3]),
+                Lock(colors[1]),
+                Lock(colors[0]),
+                Lock(colors[2]),
+            ],
+        )
     )
-)
-PRACTICE2 = ([PRACTICE2_1], "It's ok to lock some doors, as long as you can get in.")
+    return ([PRACTICE2_1], "It's ok to lock some doors, as long as you can get in.")
+
+
+PRACTICE2: CustomMapType = _get_map
 
 # Solution 1 (12 moves)
 # def script():

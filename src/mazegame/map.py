@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import random
-from typing import TYPE_CHECKING, Any, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Type, TypeVar
 
 
 import pygame
@@ -14,6 +14,8 @@ from .direction import Direction
 from .color import Color
 
 SurfsType = dict[type["Tile"] | tuple[type["Tile"], Any], pygame.Surface]
+
+CustomMapType = Callable[[], tuple[list["Map"], str]]
 
 _BLOCK_EDGE_COLOR = pygame.Color(215, 220, 225)
 _BLOCK_COLOR = pygame.Color(195, 200, 205)

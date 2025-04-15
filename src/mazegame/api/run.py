@@ -7,7 +7,7 @@ from ..preview import Preview
 from ..color import Color
 from ..direction import Direction
 from ..game import Game
-from ..map import HasColor, Map, Tile
+from ..map import CustomMapType, HasColor, Map, Tile
 from .game_obj import get_game
 from . import game_obj
 
@@ -57,14 +57,14 @@ def get_color(
     return tile.get_color()
 
 
-def run(script: Callable[[], None], map: tuple[list[Map], str]) -> None:
+def run(script: Callable[[], None], map: CustomMapType) -> None:
     """
     Run the game using given script
 
     :param script: script that specify players' movements
     :param map: Map
     """
-    _map = random.choice(map[0])
+    _map = random.choice(map()[0])
     game_obj.game = Game(_map)
 
     def updated_script() -> None:
@@ -77,13 +77,13 @@ def run(script: Callable[[], None], map: tuple[list[Map], str]) -> None:
     get_game().run()
 
 
-def preview(map: tuple[list[Map], str]) -> None:
+def preview(map: CustomMapType) -> None:
     """
     Preview the map with its description, enemy pathing, etc.
 
     :param map: Map
     """
-    Preview(*map).run()
+    Preview(*map()).run()
 
 
 def _test_run(
