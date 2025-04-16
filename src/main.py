@@ -5,5 +5,5 @@ def script():
     pass
 
 
-# run(script, PRACTICE4)
-preview(PRACTICE4)
+# run(script, TUTORIAL1)
+preview(TUTORIAL1)

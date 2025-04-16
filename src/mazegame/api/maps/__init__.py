@@ -11,4 +11,3 @@ from .tutorial5 import TUTORIAL5
 from .practice1 import PRACTICE1
 from .practice2 import PRACTICE2
 from .practice3 import PRACTICE3
-from .practice5 import PRACTICE5
