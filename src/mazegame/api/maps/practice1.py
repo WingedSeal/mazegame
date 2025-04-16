@@ -8,22 +8,23 @@ def _get_map():
     PRACTICE1_1 = Map(
         map_maker(
             f"""
-    XXXXXXX
-    XEXXSXX
-    XX_XX  X
-    X     SX
-    X SXXPXX
-    X _   XX
-    XXXXXXXX
-    X  _X
-    XXS _X_X
-    X      X
-    XX XXX X
-    X XP  X
-    X XS  X
-    X    XX
-    XXXXXXXX
-    """,
+XXXXXXXXX
+XXXEXXSXX
+XXX_XX  X
+XX     SX
+XX SXXPXX
+XX _   XX
+XXXXXXXXX
+XXXXXXXXX
+XXXX  _XX
+XXS _X_XX
+X      XX
+XX XXX XX
+XX XP  XX
+XX XS  XX
+XX    XXX
+XXXXXXXXX
+""",
             [Door(color1), Key(color2), Key(color1), Door(color1), Door(color2)],
         )
     )
