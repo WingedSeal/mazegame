@@ -34,6 +34,7 @@ def map_maker(
     map_str = map_str[1:-1]
     index = 0
     array: list[list[Tile | None]] = []
+    used_replacement_dict_keys = set()
     for row_str in map_str.split("\n"):
         row: list[Tile | None] = []
         for tile_str in row_str:
@@ -53,5 +54,15 @@ def map_maker(
                     index += 1
                 case T:
                     row.append(replacement_dict[T])
+                    used_replacement_dict_keys.add(T)
         array.append(row)
+    if index != len(replacement_list):
+        raise ValueError(
+            f"Unused items in replacement_list (used {index} out of {len(replacement_list)})"
+        )
+    replacement_dict_keys = set(replacement_dict)
+    if used_replacement_dict_keys != replacement_dict_keys:
+        raise ValueError(
+            f"Unused items in replacement_dict ({replacement_dict_keys - used_replacement_dict_keys})"
+        )
     return array
