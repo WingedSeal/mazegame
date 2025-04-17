@@ -10,7 +10,7 @@ def _get_map():
     return (
         [NIGHTMARE1_1],
         "You may import anything from the library. But do not modify the map ('NIGHTMARE1' function). Only write code in script function.\n"
-        "Try to modify color of the key object gotten from get_tile(). You might need isinstance to get intellisense working.\n"
+        "Try to modify color of the key object gotten from get_tile(). You might need 'isinstance' to get IntelliSense working.\n"
         "The color may not update on the screen. That's normal.",
     )
 

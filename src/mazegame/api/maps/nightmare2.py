@@ -10,7 +10,7 @@ def _get_map():
     return (
         [NIGHTMARE2_1],
         "You may import anything from the library. But do not modify the map ('NIGHTMARE2' function). Only write code in script function.\n"
-        "Try to modify interaction behavior of the spike object gotten from get_tile(). You might need isinstance to get intellisense working.\n"
+        "Try to modify interaction behavior of the spike object gotten from get_tile(). You might need 'isinstance' to get IntelliSense working.\n"
         "Walk over that spike!, somehow.",
     )
 
