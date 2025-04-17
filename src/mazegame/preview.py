@@ -31,7 +31,7 @@ class ColorGenerator:
     _colors: list[Color]
 
     def reset_color(self):
-        self._colors = Color.get_unique_colors(None)
+        self._colors = Color.get_unique_colors(None, [Color.RED])
 
     def __init__(self) -> None:
         self.reset_color()
@@ -41,8 +41,6 @@ class ColorGenerator:
 
         if not self._colors:
             self.reset_color()
-        if color == Color.RED:
-            return self.get_color()
         return color.value
 
 

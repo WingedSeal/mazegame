@@ -1,4 +1,5 @@
 from .hard1 import HARD1
+from .hard2 import HARD2
 from .normal1 import NORMAL1
 from .normal2 import NORMAL2
 from .normal3 import NORMAL3

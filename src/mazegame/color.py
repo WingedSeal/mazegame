@@ -13,13 +13,15 @@ class Color(Enum):
     PURPLE = _Color(180, 100, 220)
 
     @classmethod
-    def get_unique_colors(cls, count: int | None) -> list["Color"]:
+    def get_unique_colors(
+        cls, count: int | None, exceptions: list["Color"] = []
+    ) -> list["Color"]:
         """
         Randomize {count} colors from all possible colors. All of them are unique
 
         :param count: How many colors to randomize, or as many as possible if set to `None`
         """
-        all_colors = list(cls)
+        all_colors = [x for x in list(cls) if x not in exceptions]
         if count is None:
             count = len(all_colors)
         if count > len(all_colors):
