@@ -429,7 +429,7 @@ class Preview:
                         (
                             Game.DEFAULT_HEIGHT
                             - self.MIN_DESC_HEIGHT
-                            - (self.map.width * self.tile_size)
+                            - (self.map.height * self.tile_size)
                         )
                         // 2,
                     ),

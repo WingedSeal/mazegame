@@ -36,7 +36,7 @@ XXXXXXXXXXX
         )
     )
 
-    red_count = random.randrange(2, 8 + 1, 2)
+    red_count = random.randrange(4, 8 + 1, 2)
     colors = Color.get_unique_colors(9 - red_count, [Color.RED])
     floors = [
         *(ColoredFloor(Color.RED) for _ in range(red_count)),
