@@ -93,7 +93,7 @@ class Game:
         self.players = map.get_tiles(Player)
         for i, player in enumerate(self.players):
             player.index = i
-        pygame.init()
+        pygame.display.init()
         pygame.font.init()
         self.fonts = GameFont(
             heading=pygame.font.SysFont("Times New Roman", 40, bold=True),
