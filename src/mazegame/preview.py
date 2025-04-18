@@ -123,7 +123,7 @@ class Preview:
     def __init__(self, maps: list[Map], map_desc: str) -> None:
         self.maps = maps
         self.map_desc = map_desc
-        pygame.init()
+        pygame.display.init()
         pygame.font.init()
         pygame.display.set_caption(Game.TITLE + " (preview)")
         self.display_surface = pygame.display.set_mode(
