@@ -378,6 +378,10 @@ class Game:
             return False
         if x + dx >= self.map.width:
             return False
+        if y + dy < 0:
+            return False
+        if x + dx < 0:
+            return False
         target = self.map.map[y + dy][x + dx]
         if target is not None and not isinstance(target, TouchableTile):
             return False
