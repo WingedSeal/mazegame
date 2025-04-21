@@ -12,7 +12,7 @@ XXXXXXXXXX
 XXXXXXXXEX
 XXXXXXXX_X
 XXXXXXXX_X
-X___    _X
+X_____  _X
 XXX XXXX_X
 XXX XXXX_X
 XXX XXXXXX
@@ -28,6 +28,8 @@ XXXXXXXXXX
                 Lock(color0),
                 Door(color0, open=True),
                 ColoredFloor(color1),
+                Door(color0, open=True),
+                Lock(color0),
                 ColoredFloor(color2),
                 Door(color0, open=True),
                 Lock(color0),
@@ -44,7 +46,7 @@ XXXXXXXXXX
 XXXXXXXXXX
 XXXXXXXX_X
 XXXXXXXX_X
-X___    _X
+X_____  _X
 XXX XXXX_X
 XXX XXXX_X
 XXX XXXXEX
@@ -60,6 +62,8 @@ XXXXXXXXXX
                 Lock(color0),
                 Door(color0, open=True),
                 ColoredFloor(color1),
+                Door(color0, open=True),
+                Lock(color0),
                 ColoredFloor(color2),
                 Door(color0, open=True),
                 Lock(color0),
@@ -76,7 +80,7 @@ XXXXXXXXXX
 XEXXXXXXXX
 X_XXXXXXXX
 X_XXXXXXXX
-X_    ___X
+X_  _____X
 X_XXXX XXX
 X_XXXX XXX
 XXXXXX XXX
@@ -90,9 +94,11 @@ XXXXXXXXXX
                 Lock(color0),
                 Door(color0, open=True),
                 ColoredFloor(color1),
-                ColoredFloor(color2),
                 Lock(color0),
                 Door(color0, open=True),
+                ColoredFloor(color2),
+                Door(color0, open=True),
+                Lock(color0),
                 Door(color0, open=True),
                 Lock(color0),
                 ColoredFloor(color1),
@@ -107,7 +113,7 @@ XXXXXXXXXX
 XXXXXXXXXX
 X_XXXXXXXX
 X_XXXXXXXX
-X_    ___X
+X_  _____X
 X_XXXX XXX
 X_XXXX XXX
 XEXXXX XXX
@@ -121,9 +127,11 @@ XXXXXXXXXX
                 Lock(color0),
                 Door(color0, open=True),
                 ColoredFloor(color1),
-                ColoredFloor(color2),
                 Lock(color0),
                 Door(color0, open=True),
+                ColoredFloor(color2),
+                Door(color0, open=True),
+                Lock(color0),
                 Door(color0, open=True),
                 Lock(color0),
                 ColoredFloor(color3),
