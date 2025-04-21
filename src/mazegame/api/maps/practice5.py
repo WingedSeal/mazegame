@@ -144,7 +144,7 @@ XXXXXX
     )
     return (
         [PRACTICE5_1, PRACTICE5_2, PRACTICE5_3, PRACTICE5_4],
-        "There are 2 players.",
+        "The exit is above the colored wall with the same color as the colored floor.",
     )
 
 
